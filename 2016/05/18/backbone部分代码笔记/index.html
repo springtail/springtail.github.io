@@ -1,0 +1,808 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Js,Backbone," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="backbone：还未发光，就快成了历史选项…
+backbone的中文api文档： http://www.css88.com/doc/ backbone/
+另一个不错的入门介绍： http://www.ibm.com/developerworks/cn/web/wa-backbonejs/
+backbone是第一代前端mvc，很适合来做spa的页面应用。
+以及一篇很久之前的博文：JavaScrip">
+<meta property="og:type" content="article">
+<meta property="og:title" content="backbone部分代码笔记">
+<meta property="og:url" content="http://yoursite.com/2016/05/18/backbone部分代码笔记/index.html">
+<meta property="og:site_name" content="一场雨">
+<meta property="og:description" content="backbone：还未发光，就快成了历史选项…
+backbone的中文api文档： http://www.css88.com/doc/ backbone/
+另一个不错的入门介绍： http://www.ibm.com/developerworks/cn/web/wa-backbonejs/
+backbone是第一代前端mvc，很适合来做spa的页面应用。
+以及一篇很久之前的博文：JavaScrip">
+<meta property="og:updated_time" content="2016-05-18T13:30:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="backbone部分代码笔记">
+<meta name="twitter:description" content="backbone：还未发光，就快成了历史选项…
+backbone的中文api文档： http://www.css88.com/doc/ backbone/
+另一个不错的入门介绍： http://www.ibm.com/developerworks/cn/web/wa-backbonejs/
+backbone是第一代前端mvc，很适合来做spa的页面应用。
+以及一篇很久之前的博文：JavaScrip">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+
+
+
+  <title> backbone部分代码笔记 | 一场雨 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">一场雨</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">let it be beautiful</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/18/backbone部分代码笔记/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="chenmanman">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/head_image.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="一场雨">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="一场雨" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                backbone部分代码笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-18T20:30:48+08:00">
+                2016-05-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/05/18/backbone部分代码笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/18/backbone部分代码笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/05/18/backbone部分代码笔记/" class="leancloud_visitors" data-flag-title="backbone部分代码笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>backbone：还未发光，就快成了历史选项…</p>
+<p>backbone的中文api文档： <a href="http://www.css88.com/doc/backbone/" target="_blank" rel="external">http://www.css88.com/doc/ backbone/</a></p>
+<p>另一个不错的入门介绍： <a href="http://www.ibm.com/developerworks/cn/web/wa-backbonejs/" target="_blank" rel="external">http://www.ibm.com/developerworks/cn/web/wa-backbonejs/</a></p>
+<p>backbone是第一代前端mvc，很适合来做spa的页面应用。</p>
+<p>以及一篇很久之前的博文：<a href="http://www.ituring.com.cn/article/8108?q=angular" target="_blank" rel="external">JavaScript宝座：七大框架论剑</a></p>
+<p>总的来说，backbone可以写出很优雅的代码，至少是在代码的结构上。</p>
+<p>以下我会就之前的一个项目的经历，对backbone的前端流程进行一个介绍，同时也是我自己的一个总结。</p>
+<h2 id="1．-Backbone与require的结合，进行的模块的异步加载"><a href="#1．-Backbone与require的结合，进行的模块的异步加载" class="headerlink" title="1．    Backbone与require的结合，进行的模块的异步加载"></a>1．    Backbone与require的结合，进行的模块的异步加载</h2><p>在加载的index的页面中进行配置：<br> <script src="scripts/libs/require.js"></script>写在script的第一个，之后就是require的初始化的问题：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">require.config(&#123;</div><div class="line">	baseUrl: <span class="string">'scripts'</span>,</div><div class="line">	paths: &#123;	<span class="string">"jquery"</span>: <span class="string">"jquery.min"</span>,</div><div class="line">				    <span class="string">"underscore"</span>: <span class="string">"underscore.min"</span>,</div><div class="line">				    <span class="string">"backbone"</span>: <span class="string">"backbone.min"</span> &#125;，//名称，路径</div><div class="line">	shim:&#123; &#125;，//加载没有按照amd规范来写的库或包</div><div class="line">	urlArgs: <span class="string">"version=1.0.0"</span>,</div><div class="line">	callback: <span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">             require([<span class="string">'Application'</span>], <span class="keyword">function</span>(app) &#123;</div><div class="line">			      app.Start();</div><div class="line">		&#125;);</div><div class="line">	&#125;</div><div class="line">  &#125;)</div></pre></td></tr></table></figure>
+<p>最后一个回调的函数，’Application’是依赖的模块，在之前的paths中是有所加载的，然后就是调用’Application’中的一个Start();方法。<br>阮一峰老师的javascript模块化编程者篇博文就是一篇很不错的文章，另外还可以关注一下AMD规范.</p>
+<h2 id="2．-Application模块的介绍"><a href="#2．-Application模块的介绍" class="headerlink" title="2．    Application模块的介绍"></a>2．    Application模块的介绍</h2><p>Application模块在项目中是一个很基础的模块，但不是toolbox这一类的模块，在这个模块中做了什么，做的是项目初始化的配置和显示，包括登录信息的验证，页面各个主体模块的初始化加载(这些都是在登录验证通过之后进行加载的)，就是通过一个start();方法进行的。Start();方法会调用在本模块中的各种方法，同时，本模块中也可以调用其他模块的方法，主要就是通过require来加载的，用的是amd规范。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">define([<span class="string">'toolbox'</span>,<span class="string">'text!templates/AppTemplate.jst'</span>], <span class="keyword">function</span>(ToolBox,AppTemplate) &#123;</div><div class="line">	var Application = &#123;&#125;;</div><div class="line">	…</div><div class="line">	<span class="built_in">return</span> Application;</div><div class="line">&#125;)；</div></pre></td></tr></table></figure>
+<p>注意的是.jst文件，是视图模板文件，简单的来说就是，用来承接.js文件中的数据，和接受.js文件中逻辑控制显示的模板文件。模板+数据+控制，最后就是页面了，就是单页富集应用。</p>
+<h2 id="3．-具体模块中的mvc结构"><a href="#3．-具体模块中的mvc结构" class="headerlink" title="3．    具体模块中的mvc结构"></a>3．    具体模块中的mvc结构</h2><p>这边以会员模块为例，路由的定义：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">var MemberRouter=Backbone.Router.extend(&#123;</div><div class="line">	initialize:<span class="function"><span class="title">function</span></span>()&#123;			</div><div class="line">	&#125;,</div><div class="line"> 	routes:&#123;</div><div class="line">	<span class="string">"modules/MemberModule"</span>:<span class="string">"memberModule"</span>,</div><div class="line">	&#125;，</div><div class="line">	memberModule:<span class="function"><span class="title">function</span></span>()&#123;//这边是事件的注册</div><div class="line">		memberEvents.trigger(<span class="string">"MemberModule-Entry"</span>);//触发事件</div><div class="line">		Backbone.Events.trigger(<span class="string">"to-sub-module"</span>,&#123;<span class="string">"name"</span>:<span class="string">"会员管理"</span>,</div><div class="line">                             <span class="string">"url"</span>:<span class="string">"#modules/MemberModule"</span>&#125;,2);</div><div class="line">                             //这边做的是面包屑的路由</div><div class="line">	&#125;,</div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<h3 id="视图部分：view"><a href="#视图部分：view" class="headerlink" title="视图部分：view"></a>视图部分：view</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">var MemberModule = Backbone.View.extend(&#123;</div><div class="line">	template: _.template(MemberTemplate),</div><div class="line">	initialize: <span class="function"><span class="title">function</span></span>()&#123;</div><div class="line">		this.addView=new AddMemberView();</div><div class="line">		this.memberManager=new MemberManagerView();</div><div class="line">		this.sendMessageView=new SendMessageView();</div><div class="line">		this.careForMemberView=new CareForMemberView();</div><div class="line">		this.careForMemberRecordView=new CareForMemberRecordView();</div><div class="line">		this.memberBirthdayRecordView=new MemberBirthdayRecordView();</div><div class="line">		this.memberCardAboutToReachDateRecordView =</div><div class="line">     new MemberCardAboutToReachDateRecordView();</div><div class="line">		this.memberHasBeenStoppedCardRecordView =</div><div class="line">     new MemberHasBeenStoppedCardRecordView();</div><div class="line">		this.router=new MemberRouter();</div><div class="line">		memberEvents.on(<span class="string">"MemberModule-Entry"</span>,this.render,this);</div><div class="line">		memberEvents.on(<span class="string">"MemberModule-cardInstance-info"</span>,</div><div class="line">                     this.openCardInstanceInfoPlugin,this);</div><div class="line">	&#125;,</div><div class="line">	render: <span class="function"><span class="title">function</span></span>()&#123;</div><div class="line">		this.<span class="variable">$el</span>.html(this.template(&#123;<span class="string">"tempId"</span>:<span class="string">"member-module"</span>&#125;));</div><div class="line">		this.$(<span class="string">'.list-group&gt;a'</span>).hover(<span class="function"><span class="title">function</span></span>()&#123;</div><div class="line">			$(this).addClass(<span class="string">"active"</span>);</div><div class="line">		&#125;,<span class="function"><span class="title">function</span></span>()&#123;</div><div class="line">			$(this).removeClass(<span class="string">"active"</span>);</div><div class="line">		&#125;);</div><div class="line">		$(<span class="string">"#breadCrumbs"</span>).show();</div><div class="line">		<span class="built_in">return</span> this;</div><div class="line">	&#125;,</div><div class="line"></div><div class="line">	openCardInstanceInfoPlugin: <span class="keyword">function</span>(cardInstanceId)&#123;</div><div class="line">		App.openPluginShow(&#123;</div><div class="line">			<span class="string">"title"</span>:<span class="string">"查看会员会籍信息"</span>,</div><div class="line">			<span class="string">"link"</span>:<span class="string">"modules/MemberShipModule/plugin/cardInstanceInfo/"</span></div><div class="line">               +cardInstanceId,</div><div class="line">			<span class="string">"originLink"</span>:<span class="string">"modules/MemberModule/list"</span>,</div><div class="line">			<span class="string">"context"</span>:memberEvents,</div><div class="line">			<span class="string">"event"</span>:<span class="string">"none"</span></div><div class="line">		&#125;);</div><div class="line">	&#125;,</div><div class="line">   open: <span class="keyword">function</span>(baseEL,option)&#123;</div><div class="line">     this.setElement(baseEL);</div><div class="line">     this.addView.setElement(this.<span class="variable">$el</span>);</div><div class="line">     this.memberManager.setElement(baseEL);</div><div class="line">     this.sendMessageView.setElement(baseEL);</div><div class="line">     this.careForMemberView.setElement(baseEL);</div><div class="line">     this.careForMemberRecordView.setElement(baseEL);</div><div class="line">     this.memberBirthdayRecordView.setElement(baseEL);//</div><div class="line">     this.memberCardAboutToReachDateRecordView.setElement(baseEL);//</div><div class="line">     this.memberHasBeenStoppedCardRecordView.setElement(baseEL);//</div><div class="line">   &#125;</div><div class="line"></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>其中包括了对其他的view的引用。在事件的处理上，有对之前的注册的事件的监听，同时还有相应的function进行控制。<br>‘this.$el.html(this.template({“tempId”:”member-module”}));’ 这边就是 :</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">&lt;h3 style=<span class="string">"line-height:34px;"</span>&gt;</div><div class="line">	&lt;span class=<span class="string">"glyphicon glyphicon-list"</span>&gt;&lt;/span&gt;&amp;nbsp;&amp;nbsp;会员管理选项</div><div class="line">	&lt;a href=<span class="string">""</span> target=<span class="string">"_blank"</span> style=<span class="string">"float:right;"</span>&gt;</div><div class="line">   &lt;span style=<span class="string">"font-size:20px;font-family:'微软雅黑'"</span>&gt;查看帮助&lt;/span&gt;&lt;/a&gt;</div><div class="line">&lt;/h3&gt;</div><div class="line">&lt;hr/&gt;</div><div class="line">&lt;div class=<span class="string">"module-menu"</span>&gt;</div><div class="line">	&lt;div class=<span class="string">"list-group"</span>&gt;</div><div class="line">	  &lt;a href=<span class="string">"#modules/MemberModule/add"</span> class=<span class="string">"list-group-item"</span>&gt;</div><div class="line">	    &lt;h4 class=<span class="string">"list-group-item-heading"</span>&gt;新增会员&lt;/h4&gt;</div><div class="line">	    &lt;p class=<span class="string">"list-group-item-text"</span>&gt;创建新会员&lt;/p&gt;</div><div class="line">	  &lt;/a&gt;</div><div class="line">	&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure>
+<p>以上是一个二级导航页。</p>
+<p>在view里面还可以进行操作事件的声明，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">events:&#123;</div><div class="line">		<span class="string">"click #customernameBtn"</span>:<span class="string">"customernamebtn"</span>,				</div><div class="line">	&#125;,</div><div class="line">Customernamebtn：<span class="function"><span class="title">function</span></span>()&#123;</div><div class="line">&#125;,</div></pre></td></tr></table></figure>
+<h3 id="4．-和后台的通信"><a href="#4．-和后台的通信" class="headerlink" title="4．    和后台的通信"></a>4．    和后台的通信</h3><p>Fetch();方法从后台获取数据。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"> formParam.fetch(&#123;url:<span class="string">"employee/form"</span>&#125;).then(<span class="keyword">function</span>(data)&#123;&#125;);</div><div class="line">infoCustomer:<span class="keyword">function</span>(id)&#123;</div><div class="line">var that=this;</div><div class="line">this.model = new CustomerModel(&#123;id:id&#125;);		</div><div class="line">this.model.fetch().then(<span class="keyword">function</span>(res)&#123;</div><div class="line"> <span class="comment">#      if(res.success)&#123;</span></div><div class="line"> <span class="comment">#  			   that.$el.html(</span></div><div class="line"> <span class="comment">#					 that.template(&#123;"tempId":"customer-info",</span></div><div class="line"> <span class="comment">#                       "data":that.model.toJSON()&#125;</span></div><div class="line"> <span class="comment">#                       ));</span></div><div class="line"> <span class="comment">#  		 &#125;else&#123;</span></div><div class="line"> <span class="comment">#		     alert("详情加载失败");</span></div><div class="line"> <span class="comment">#  		&#125;</span></div><div class="line">	&#125;);</div><div class="line">&#125;,</div></pre></td></tr></table></figure></p>
+<p>save() 函数将在后台委托给 Backbone.sync，这是负责发出 RESTful 请求的组件，默认使用 jQuery 函数 $.ajax()。以model为例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">var CustomerModel= ToolBox.BaseModel.extend(&#123;</div><div class="line">	urlRoot:<span class="string">"customer"</span></div><div class="line">&#125;);</div><div class="line">addCustomer: <span class="function"><span class="title">function</span></span>()&#123;</div><div class="line">	var params = ToolBox.formJSON(this.$(<span class="string">"#addCustomer"</span>));</div><div class="line">	var addModel=new CustomerModel();</div><div class="line"> <span class="comment">#		addModel.save(params).then(function(res)&#123;</span></div><div class="line"><span class="comment">#		if(res.success)&#123;</span></div><div class="line"> <span class="comment">#    		alert("保存成功");</span></div><div class="line"><span class="comment">#		&#125;</span></div><div class="line"><span class="comment">#	&#125;);</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这边有两个路径的问题：1，后台的url就是“customer”，前台的数据就是通过form表单来获取的，不然通过前台的model创建拼接也是可以的。</p>
+<h3 id="5．-collection在backbone是一个很基础的模型"><a href="#5．-collection在backbone是一个很基础的模型" class="headerlink" title="5．    collection在backbone是一个很基础的模型"></a>5．    collection在backbone是一个很基础的模型</h3><p>在做列表显示的时候，collection有很好的表现。</p>
+<h3 id="6．-跨模块直接的调用跳转："><a href="#6．-跨模块直接的调用跳转：" class="headerlink" title="6．    跨模块直接的调用跳转："></a>6．    跨模块直接的调用跳转：</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">App.mainWrapper.openModule(<span class="string">"MemberShipModule"</span>,&#123;</div><div class="line">		redirect:<span class="string">"modules/MemberShipModule/cardInstance/manage"</span></div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>在application中：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Application.router.navigate(<span class="string">"/"</span>,&#123;trigger: <span class="literal">true</span>&#125;);</div></pre></td></tr></table></figure></p>
+<p>所以这边就是1个问题：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">navigaterouter.navigate(fragment, [options])</div></pre></td></tr></table></figure></p>
+<p>其余的还有一些plugin的调用，这边调用的时候用的是.html级的，就存在一些数据的传递的问题，暂不展开。<br>总之，第一代mvc可以在单个模块之间，多模块之间进行灵活的操作，代码量会很大，但是，横向和纵向来说都可以是代码的结构显得很优雅。<br>以上。CanvasChen.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Js/" rel="tag"># Js</a>
+          
+            <a href="/tags/Backbone/" rel="tag"># Backbone</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/11/服务器配置/" rel="next" title="服务器配置">
+                <i class="fa fa-chevron-left"></i> 服务器配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/19/git及mysql配置笔记/" rel="prev" title="git及mysql配置笔记">
+                git及mysql配置笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/18/backbone部分代码笔记/"
+           data-title="backbone部分代码笔记" data-url="http://yoursite.com/2016/05/18/backbone部分代码笔记/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/head_image.jpg"
+               alt="chenmanman" />
+          <p class="site-author-name" itemprop="name">chenmanman</p>
+          <p class="site-description motion-element" itemprop="description">等一场雨</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1．-Backbone与require的结合，进行的模块的异步加载"><span class="nav-number">1.</span> <span class="nav-text">1．    Backbone与require的结合，进行的模块的异步加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2．-Application模块的介绍"><span class="nav-number">2.</span> <span class="nav-text">2．    Application模块的介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3．-具体模块中的mvc结构"><span class="nav-number">3.</span> <span class="nav-text">3．    具体模块中的mvc结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#视图部分：view"><span class="nav-number">3.1.</span> <span class="nav-text">视图部分：view</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4．-和后台的通信"><span class="nav-number">3.2.</span> <span class="nav-text">4．    和后台的通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5．-collection在backbone是一个很基础的模型"><span class="nav-number">3.3.</span> <span class="nav-text">5．    collection在backbone是一个很基础的模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6．-跨模块直接的调用跳转："><span class="nav-number">3.4.</span> <span class="nav-text">6．    跨模块直接的调用跳转：</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chenmanman</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chenmanman"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("ytqhqfWc5FgkujcTaFJy74qd-gzGzoHsz", "NuN029AE0uD0ORqva9tzYwXU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

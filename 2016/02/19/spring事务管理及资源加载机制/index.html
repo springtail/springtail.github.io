@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="一期阅读," />
+  <meta name="keywords" content="spring," />
 
 
 
@@ -84,27 +84,31 @@
 
 
 
-<meta name="description" content="1.这是一个故事，一个长长的故事。
-2.德克斯的母亲曾经在伦敦学过时装，不过现在经营的是一间乡村古董店，向附庸风雅的牛津人出售昂贵的挂毯和枝形吊灯，生意颇为红火，她的身上依旧带有“六十年代风光过的”气息。但没有流露一丝为了拥有一个安稳，舒适，体面尊贵的家而牺牲了它的伤感和后悔。
-3.“爱玛.莫利，我喜欢她，你父亲也是。虽然被她说成是资产阶级的法西斯”“只是个朋友”
-4.“没错，但有时我琢磨着你是不">
+<meta name="description" content="事务管理spring将事务的管理委托给了持久层的框架
+四个特性：原子性，一致性，隔离性，持久性。
+事务的隔离级别，四层。
+jdbc对事务的管理，2.0的时候只有：提交和回滚。
+不管选择的是Spring JDBC，Hibernate，jpa，还是ibatis，spring为为事务管理提供统一的模板，声明式事务管理。
+Spring的事务管理spi的抽象层主要包括3个接口，分别是PlatformTran">
 <meta property="og:type" content="article">
-<meta property="og:title" content="读：One Day">
-<meta property="og:url" content="http://yoursite.com/2016/06/14/读：One-Day/index.html">
+<meta property="og:title" content="spring事务管理及资源加载机制">
+<meta property="og:url" content="http://yoursite.com/2016/02/19/spring事务管理及资源加载机制/index.html">
 <meta property="og:site_name" content="一场雨">
-<meta property="og:description" content="1.这是一个故事，一个长长的故事。
-2.德克斯的母亲曾经在伦敦学过时装，不过现在经营的是一间乡村古董店，向附庸风雅的牛津人出售昂贵的挂毯和枝形吊灯，生意颇为红火，她的身上依旧带有“六十年代风光过的”气息。但没有流露一丝为了拥有一个安稳，舒适，体面尊贵的家而牺牲了它的伤感和后悔。
-3.“爱玛.莫利，我喜欢她，你父亲也是。虽然被她说成是资产阶级的法西斯”“只是个朋友”
-4.“没错，但有时我琢磨着你是不">
-<meta property="og:image" content="http://chenmanman.github.io/images/oneday/oneday.jpg">
-<meta property="og:updated_time" content="2016-11-23T02:58:43.000Z">
+<meta property="og:description" content="事务管理spring将事务的管理委托给了持久层的框架
+四个特性：原子性，一致性，隔离性，持久性。
+事务的隔离级别，四层。
+jdbc对事务的管理，2.0的时候只有：提交和回滚。
+不管选择的是Spring JDBC，Hibernate，jpa，还是ibatis，spring为为事务管理提供统一的模板，声明式事务管理。
+Spring的事务管理spi的抽象层主要包括3个接口，分别是PlatformTran">
+<meta property="og:updated_time" content="2016-11-23T03:00:50.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="读：One Day">
-<meta name="twitter:description" content="1.这是一个故事，一个长长的故事。
-2.德克斯的母亲曾经在伦敦学过时装，不过现在经营的是一间乡村古董店，向附庸风雅的牛津人出售昂贵的挂毯和枝形吊灯，生意颇为红火，她的身上依旧带有“六十年代风光过的”气息。但没有流露一丝为了拥有一个安稳，舒适，体面尊贵的家而牺牲了它的伤感和后悔。
-3.“爱玛.莫利，我喜欢她，你父亲也是。虽然被她说成是资产阶级的法西斯”“只是个朋友”
-4.“没错，但有时我琢磨着你是不">
-<meta name="twitter:image" content="http://chenmanman.github.io/images/oneday/oneday.jpg">
+<meta name="twitter:title" content="spring事务管理及资源加载机制">
+<meta name="twitter:description" content="事务管理spring将事务的管理委托给了持久层的框架
+四个特性：原子性，一致性，隔离性，持久性。
+事务的隔离级别，四层。
+jdbc对事务的管理，2.0的时候只有：提交和回滚。
+不管选择的是Spring JDBC，Hibernate，jpa，还是ibatis，spring为为事务管理提供统一的模板，声明式事务管理。
+Spring的事务管理spi的抽象层主要包括3个接口，分别是PlatformTran">
 
 
 
@@ -136,7 +140,7 @@
 
 
 
-  <title> 读：One Day | 一场雨 </title>
+  <title> spring事务管理及资源加载机制 | 一场雨 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -257,7 +261,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/06/14/读：One-Day/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/02/19/spring事务管理及资源加载机制/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="chenmanman">
@@ -281,7 +285,7 @@
             
             
               
-                读：One Day
+                spring事务管理及资源加载机制
               
             
           </h1>
@@ -294,8 +298,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-14T21:18:33+08:00">
-                2016-06-14
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-02-19T20:54:21+08:00">
+                2016-02-19
               </time>
             
 
@@ -310,8 +314,8 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="/2016/06/14/读：One-Day/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/14/读：One-Day/" itemprop="commentCount"></span>
+                <a href="/2016/02/19/spring事务管理及资源加载机制/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/02/19/spring事务管理及资源加载机制/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -321,7 +325,7 @@
 
           
           
-             <span id="/2016/06/14/读：One-Day/" class="leancloud_visitors" data-flag-title="读：One Day">
+             <span id="/2016/02/19/spring事务管理及资源加载机制/" class="leancloud_visitors" data-flag-title="spring事务管理及资源加载机制">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -346,42 +350,30 @@
       
 
       
-        <p>1.这是一个故事，一个长长的故事。</p>
-<p>2.德克斯的母亲曾经在伦敦学过时装，不过现在经营的是一间乡村古董店，向附庸风雅的牛津人出售昂贵的挂毯和枝形吊灯，生意颇为红火，她的身上依旧带有“六十年代风光过的”气息。但没有流露一丝为了拥有一个安稳，舒适，体面尊贵的家而牺牲了它的伤感和后悔。</p>
-<p>3.“爱玛.莫利，我喜欢她，你父亲也是。虽然被她说成是资产阶级的法西斯”“只是个朋友”</p>
-<p>4.“没错，但有时我琢磨着你是不是有太多的东西可以靠，我只是说，早晚又一天，你得严肃的面对生活，就是这么回事，你现在年轻，健康，不乏帅气，挺有人缘，也许不是作学问的料，但是懂得人情事理，运气也还好，相当的好，德克斯特，你得到了各种的呵护，不过你现在是成年人了，有一天生活可能会改变。。。你应该。。。”“像我爸的口气，像样的工作，有依靠，有奋斗，仁慈的上帝啊”</p>
-<p>5.德克斯从泰国回来，那一刻，她就明白，他们之间再也容不下男女之情了，他经历丰富，而她过的很平淡，甚至是有点糟糕。</p>
-<p>6.德克斯带着内奥米来到店里吃东西的时候，给了爱玛小费，爱玛觉得自己的灵魂的一小块再次流失了。他不该这样的。</p>
-<p>7.我笑着面对困境，而你却嘲笑我。</p>
-<p>8.在酒精的作用下，她有点恍惚，定了定神才终于认识到生活已经变的太复杂了，于是下定决心：不在外借宿，再也不写诗歌，再也不虚度光阴。</p>
-<p>9.有些日子里，你一觉醒来诸事完美。</p>
-<p>10.交往守则：1，卧室分开 2，不能调情 3，不许嘻嘻哈哈 4，禁止裸体示人 。结果全部都破了。</p>
-<p>11.他们最合适的时机早就错过了。</p>
-<p>12.逢上状态好，她便觉得自己像是穆丽尔.斯帕克小说里的人物，独立有思想，透着书卷气息和骨子里的浪漫情怀，英语和历史优等双学士学位，一纸教育学的研究生文凭。嗯，生活终于柳暗花明了，还有一个约会。</p>
-<p>13.母亲的身体大不如前，旧时的座椅，面朝田野和森林，烟雾迷蒙的牛津郡，遮阳帽，走廊，如今的她眼睛怕光。</p>
-<p>14.姐姐凯西从后院里进来，双手托着一个托盘，一脸的干练，恭敬，通达世情的神态，34岁的她安然的扮演着严谨护士长的角色，倒也颇为合适，她半露微笑半皱眉头的与他面颊相贴，“浪子回家了”</p>
-<p>15.“可怜的小德克斯特”她说到：“我们都不是自己了，是吗？我肯定，我变了，再也不是原来的我了，你也不是，你不再是你，不再是我记得的那个你了，有时候，我担心你没有那么的善良了。”</p>
-<p>16.他努力的端正态度，做到脚踏实地，去发现力不从心，他明显越来越浅薄，自私，说的话也越来越无知。</p>
-<p>17.他和母亲一向亲近，坦然相待的，他们一向的相互理解却又代之以苦涩，嫌隙，双方都为放生的一切各自苦恼。“我并不是古板的人，也不介意来点俗气的”“只是图一个乐子”。这是他见母亲的最后一面.</p>
-<p>18。“德克斯特，我看着你都醉了20年了，不许你这样放肆的侮辱我或者你母亲的智商。你母亲非常非常的爱你，我也是，我们一向都是，但是，在你母亲剩下的时光里，请。。。不论还有多久。”</p>
-<p>19.她瞥了一眼她的食客，每一个都在自己的戏里。</p>
-<p><img src="http://chenmanman.github.io/images/oneday/oneday.jpg" alt="Alt text"></p>
-<p>20.一场糟糕透顶的电视现场直播，一场精彩绝伦的话剧表演。</p>
-<p>21.爱玛不爱他，试过了，努力的去爱他，却还是做不到。更多的是愤怒和怜悯。可怜的伊恩。</p>
-<p>22.德克斯特，我很爱你，深深的爱着，这份爱可能会持续到永远，她吻了他的面颊，可是，我再也不喜欢你了，对不起。</p>
-<p>23.爱玛，拒绝了伊恩的求婚，做了别人情妇，各取所需，及时行乐。</p>
-<p>24.他意识到起初是不由自主的陷进去，自作孽，糟蹋了很多的事，也砸了自己的工作，毁了和母亲的关系。</p>
-<p>25.他和西维尔结了婚，并有了一个女儿，贾斯敏。一段仅维持了两年的婚姻。</p>
-<p>26.“我是认真的，如果你只是玩弄我，或者辜负了我，我就杀了你，我对天发誓，我会把你的心吃掉”，然后，爱玛吻了德克斯。</p>
-<p>27.于是，又一个工作日开始了，一如往日，也将一直持续，他起床沐浴，然后趁她洗澡的时候，去买报纸，捎带牛奶，之后，两个人悄声默契的吃早饭，然后分别看报纸的体育版和新闻版，最后她从走廊上搬出自行车，由他陪着去地铁，八点二十五分左右，他们一吻而别，在他父亲的帮助下，德克斯经营了一家咖啡店，当然还有爱玛。白色的橱窗，还有阳关，一切都在慢慢的变好。</p>
-<p>28.贾斯敏两岁半了，今晚会过来，爱玛也在家，这么多年来，他第一次感觉做回了自己，他有一个心爱的渴望的女人，他的搭档兼最好的朋友，还有一个聪慧漂亮的女儿，一份如意的工作，还有刚刚开始原谅他的父亲。只要坚持，一切都会好起来的。</p>
-<p>29.“明年四月，我就满三十九了，德克斯”“再有两周，我就四十了”这天下午，爱玛死于回家的路上，因为车祸。“这下要迟到了，德克斯要等我一会儿了”</p>
-<p>30.三十八岁了，要是还在指望用一首歌，一本书或者一部电影改变人生，岂不是荒唐！不，一切都平淡了，沉静了。生活的背景音乐已变成了安然，知足而又亲娘的轻唱，再也没有刺激的起起落落，一切都定格了，中年，中间阶层，比上不足，比下有余的小幸福，最后，她爱着一个人，也确信为对方所爱，如果有人问起爱玛，她和丈夫是怎么相遇的，她会说：“我们是一起长大的。”</p>
-<p>31.母亲去世之后，这栋大宅子里，一个又一个的房间被锁上，只有厨房，起居室和卧室父亲还在用，有时父亲会睡在沙发上，会着凉的。父亲就是这样一个人过了十年。</p>
-<p>32。爱玛一周年：烂醉之后，父亲和前妻帮他脱掉满是呕吐物的衣物，然后把他弄进浴缸。那天，他们在夏日夜晚的灯光中，在挂满家人照片的房间里，看着电视，不知不觉，他安静的哭了，却小心翼翼的用手遮住双眼，就在父亲的身边。</p>
-<p>33.爱玛二周年：他会和爱玛的父母，他的父亲，前妻，女儿，伊恩通电话，报平安，自己过的挺好，之后，他重新整理爱玛的遗物，一些该扔掉，一些该寄给她的父母，一些自己珍藏。回忆他们最初相遇的场景：那间公寓，那个山坡。</p>
-<p>34.爱玛三周年：德克斯，马蒂，贾斯敏来到爱丁堡，故事最开始的地方，马蒂去了美术馆，“我说了，我真的不介意”之后，德克斯河女儿去了那个山坡。“爱玛也来过这儿吗”“她来过，我们一起来的。”</p>
-<p>35.“再见，爱玛”“再见，德克斯”。</p>
+        <h2 id="事务管理"><a href="#事务管理" class="headerlink" title="事务管理"></a>事务管理</h2><p>spring将事务的管理委托给了持久层的框架</p>
+<p>四个特性：原子性，一致性，隔离性，持久性。</p>
+<p>事务的隔离级别，四层。</p>
+<p>jdbc对事务的管理，2.0的时候只有：提交和回滚。</p>
+<p>不管选择的是Spring JDBC，Hibernate，jpa，还是ibatis，spring为为事务管理提供统一的模板，声明式事务管理。</p>
+<p>Spring的事务管理spi的抽象层主要包括3个接口，分别是PlatformTransationManager,TransationDefinition和TransationStatus.</p>
+<p>TransationDefinition描述事务的隔离级别，超时时间，是否为只读事务等控制事务具体行为的事务属性，这些事务属性可以通过xml配置或者注解描述提供，也可以通过手动编程的方式进行设置。</p>
+<p>PlatformTransationManager根据TransationDefinition提供的事务属性配置信息，创建事务，并用TransationStatus来描述这个激活事务的状态。</p>
+<p>不同的持久层框架对应不同的事务管理器的实现类。</p>
+<p>编程式事务管理：TransactionTemplate</p>
+<p>xml配置声明式事务管理：通过spring aop实现，通过事务的声明信息，spring将事务管理增强逻辑动态的织入到业务的方法相应的连接点中。这些逻辑就包括：获取线程绑定资源，开始事务，提交／回滚事务等。</p>
+<p>注解配置声明式事务：具有一组普适性的默认事务属性。使用很方便</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;tx:annotation-driven transaction-manager=<span class="string">"transactionManager"</span> /&gt;</div><div class="line">&lt;bean id=<span class="string">"transactionManager"</span></div><div class="line">class=<span class="string">"org.springframework.jdbc.</span></div><div class="line">datasource.DataSourceTransactionManager"&gt;</div><div class="line">&lt;property name=<span class="string">"dataSource"</span> ref=<span class="string">"dataSource"</span> /&gt;</div><div class="line">&lt;/bean&gt;</div></pre></td></tr></table></figure>
+<p>Spring框架提供的各种的好处的唯一前提就是让pojo的类变成受Spring容器管理的Bean。</p>
+<h2 id="资源加载机制"><a href="#资源加载机制" class="headerlink" title="资源加载机制"></a>资源加载机制</h2><p> Spring 的Resource接口及其实现类可以脱离Spring框架使用，比JDK的资源访问api更加好用.</p>
+<p> FileSystemResource,以文件系统的绝对路径的方式进行访问。</p>
+<p> ClassPathResource，以类路径的方式进行访问。</p>
+<p> ServletContextResource，以相对于web应用根目录的方式进行访问。</p>
+<p>资源地址表达式：</p>
+<p>clsspath:com/controller/test.java   相对于类的根路径</p>
+<p>file:com/controller/test.java 可以是相对路径，也可以是绝对路径</p>
+<p><a href="http://www.baidu.com/resource/test.xml" target="_blank" rel="external">http://www.baidu.com/resource/test.xml</a> 使用UrlResource从Web服务器上获取资源。</p>
+<p>ftp://www.baidu.com/resource/test.xml使用UrlResource从FTP服务器上获取资源。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">String path = <span class="string">"E:/java/abc.txt"</span>; //绝对路径</div><div class="line"></div><div class="line">Resource resource1 = new FileSystemResource(path);</div><div class="line"></div><div class="line">System.out.println(<span class="string">"resource1 : "</span>+resource1.getFilename());</div><div class="line"></div><div class="line">File f = new File(<span class="string">"text.txt"</span>);</div><div class="line"></div><div class="line">System.out.println( f.getCanonicalPath());</div><div class="line"></div><div class="line">System.out.println( f.getAbsolutePath());</div><div class="line"></div><div class="line">Resource resource2 = new FileSystemResource(f);</div><div class="line"></div><div class="line">System.out.println(<span class="string">"resource2 : "</span>+resource2.getFilename());</div><div class="line"></div><div class="line">Resource res=new ClassPathResource(</div><div class="line">             <span class="string">"com/dspsemi/backend/controller/account/file.txt"</span></div><div class="line">             );//相对路径</div><div class="line"></div><div class="line">EncodedResource enc=new EncodedResource(res,<span class="string">"UTF-8"</span>);</div><div class="line"></div><div class="line"> String cont= FileCopyUtils.copyToString( enc.getReader());</div><div class="line"></div><div class="line"> System.out.println(cont);</div><div class="line"></div><div class="line"> ResourcePatternResolver resolver=new  PathMatchingResourcePatternResolver();</div><div class="line"></div><div class="line"> ​​​Resource resources[]=resolver.getResources(</div><div class="line">             <span class="string">"classpath*:/com/dspsemi/backend/controller/account/*"</span></div><div class="line">             );</div><div class="line"></div><div class="line"> <span class="keyword">for</span>(Resource resource:resources)&#123;</div><div class="line"></div><div class="line">   ​​System.out.println( resource.getFilename());//注意这边的文件后缀.class文件</div><div class="line"></div><div class="line"> &#125;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">Console:</div><div class="line">resource1 : abc.txt</div><div class="line">E:\workspace\dining1.0\backend\text.txt</div><div class="line">E:\workspace\dining1.0\backend\text.txt</div><div class="line">resource2 : text.txt</div><div class="line">this is content of file.txt</div><div class="line">BillController.class</div><div class="line">file.txt</div><div class="line">ReconciliationController.class</div><div class="line">SourceSystemTest.class</div><div class="line">VoucherController.class</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -405,7 +397,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/一期阅读/" rel="tag"># 一期阅读</a>
+            <a href="/tags/spring/" rel="tag"># spring</a>
           
         </div>
       
@@ -414,15 +406,15 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/14/读：一个人的朝圣/" rel="next" title="读：一个人的朝圣">
-                <i class="fa fa-chevron-left"></i> 读：一个人的朝圣
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/02/19/spring的aop部分/" rel="prev" title="spring的aop部分">
+                spring的aop部分 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -448,8 +440,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/06/14/读：One-Day/"
-           data-title="读：One Day" data-url="http://yoursite.com/2016/06/14/读：One-Day/">
+      <div class="ds-thread" data-thread-key="2016/02/19/spring事务管理及资源加载机制/"
+           data-title="spring事务管理及资源加载机制" data-url="http://yoursite.com/2016/02/19/spring事务管理及资源加载机制/">
       </div>
     
   </div>
@@ -473,8 +465,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/images/head_image.jpg"
@@ -520,6 +521,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#事务管理"><span class="nav-number">1.</span> <span class="nav-text">事务管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源加载机制"><span class="nav-number">2.</span> <span class="nav-text">资源加载机制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
     </div>

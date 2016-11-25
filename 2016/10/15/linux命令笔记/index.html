@@ -1,0 +1,891 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Linux," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="https://springtail.github.io/favicon.ico" />
+
+
+
+
+
+
+<meta name="description" content="基础指令操作日期：date
+日历：cal
+计算器：bc
+查看帮助：man
+关机：shutdown -h now  ， shutdown -h 15:00  ，shutdown -h +10  ，shutdown -r now
+权限，组群:chgrp :改变档案的所属群组
+chown :改变档案所属人
+chmod: 改变档案的属性，suid,等等的特性
+添加一个组群：groupadd users
+c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux命令笔记">
+<meta property="og:url" content="http://yoursite.com/2016/10/15/linux命令笔记/index.html">
+<meta property="og:site_name" content="一场雨">
+<meta property="og:description" content="基础指令操作日期：date
+日历：cal
+计算器：bc
+查看帮助：man
+关机：shutdown -h now  ， shutdown -h 15:00  ，shutdown -h +10  ，shutdown -r now
+权限，组群:chgrp :改变档案的所属群组
+chown :改变档案所属人
+chmod: 改变档案的属性，suid,等等的特性
+添加一个组群：groupadd users
+c">
+<meta property="og:updated_time" content="2016-11-25T10:17:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="linux命令笔记">
+<meta name="twitter:description" content="基础指令操作日期：date
+日历：cal
+计算器：bc
+查看帮助：man
+关机：shutdown -h now  ， shutdown -h 15:00  ，shutdown -h +10  ，shutdown -r now
+权限，组群:chgrp :改变档案的所属群组
+chown :改变档案所属人
+chmod: 改变档案的属性，suid,等等的特性
+添加一个组群：groupadd users
+c">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+
+
+
+  <title> linux命令笔记 | 一场雨 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">一场雨</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">let it be beautiful</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/15/linux命令笔记/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="chenmanman">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/head_image.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="一场雨">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="一场雨" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                linux命令笔记
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-15T00:00:00+08:00">
+                2016-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/10/15/linux命令笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/15/linux命令笔记/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/10/15/linux命令笔记/" class="leancloud_visitors" data-flag-title="linux命令笔记">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="基础指令操作"><a href="#基础指令操作" class="headerlink" title="基础指令操作"></a>基础指令操作</h4><p>日期：date</p>
+<p>日历：cal</p>
+<p>计算器：bc</p>
+<p>查看帮助：man</p>
+<p>关机：shutdown -h now  ， shutdown -h 15:00  ，shutdown -h +10  ，shutdown -r now</p>
+<h4 id="权限，组群"><a href="#权限，组群" class="headerlink" title="权限，组群:"></a>权限，组群:</h4><p>chgrp :改变档案的所属群组</p>
+<p>chown :改变档案所属人</p>
+<p>chmod: 改变档案的属性，suid,等等的特性</p>
+<p>添加一个组群：groupadd users</p>
+<p>chgrp -R users install.log (-R表示 目录下递归)  修改组群权限</p>
+<p>chown -R chenmanman install.log   修改拥有人的权限</p>
+<p>chown root:root install.log  账号名称:组群名称</p>
+<p>chmod 777 1  :-rwxrwxrwx</p>
+<h4 id="根目录下个文件夹结构"><a href="#根目录下个文件夹结构" class="headerlink" title="根目录下个文件夹结构"></a>根目录下个文件夹结构</h4><p>/bin,/usr/bin,/usr/local/bin  : 举例来说， ls, mv, rm, mkdir, rmdir, gzip, tar, cat, cp, mount 等等重要指令都放在这个目录当中</p>
+<p>/boot : 这个目录主要的目的是放置 Linux 系统开机会用到的档案</p>
+<p>/dev : 在 Linux 系统上，任何装置与接口设备都是以档案的型态存在于这个目录当中的</p>
+<p>/etc : 系统主要的设定文件几乎都放置在这个目录内，例如人员的 号密码文件、 各种 服务的启始档等等。</p>
+<p>/home : 这是系统预设的使用者家目录 (home directory)。</p>
+<p>/lib,/usr/lib,/usr/local/lib : 系统会使用到的函式库放置的目录。</p>
+<p>/opt : 这是给主机额外安装软件所 放的目录。</p>
+<p>/root : 系统管理员 (root) 的家目录。</p>
+<p>/tmp : 这是让一般使用者或者是正在执行的程序 时放置档案的地方。</p>
+<p>/usr : 在 /usr 此目录下，包 系统的主要程序、 图形接口 所需要的档案、额外的函式库、本机端所自行安装的软件，以及共享的目录与文件 等等， 都可以在这个目录当中发现。事实上，他有点像是 Windows 操作系统当中 的『Program files』与 『WinNT』这两个目录的结合.</p>
+<p>/var : 他主要放置的是针对系统 执行过程中，常态性变动的档案放置的目录。举例来说，例如快取档案 (cache) 或 者是随时变更的登录档 (log file) 都是放在这个目录中的。</p>
+<h4 id="档案和目录管理"><a href="#档案和目录管理" class="headerlink" title="档案和目录管理"></a>档案和目录管理</h4><p>pwd mkdir rmdir</p>
+<p>ls cp rm mv</p>
+<h4 id="档案内容查阅"><a href="#档案内容查阅" class="headerlink" title="档案内容查阅"></a>档案内容查阅</h4><p>cat tac head tail   :head -n 100 pom.xml  tail -n 100 pom.xml</p>
+<p>file 查看文件类型</p>
+<p>which （寻找[执行档]）</p>
+<p>whereis命令是定位可执行文件、源代码文件、帮助文件在文件系统中的位置</p>
+<p>find</p>
+<h4 id="档案的压缩和打包"><a href="#档案的压缩和打包" class="headerlink" title="档案的压缩和打包"></a>档案的压缩和打包</h4><p>compress 和 compress -d  文件</p>
+<p>gzip 压缩 和 gzip -d 解压缩   文件</p>
+<p>zcat 解压缩</p>
+<p>tar :</p>
+<pre><code>tar -cvf /tmp/etc.tar /etc   仅打包，不压缩
+
+tar -zcvf aa.tar.gz test  打包，以gzip压缩
+</code></pre><h4 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h4><pre><code>一般模式：游标移动 ，搜寻，取代 删除字元 ，删除整列 ，复制整列 ，贴上整列
+        Ctrl+f 下翻页
+        H 光标移动到屏幕的最上那一行
+        L 光标移动到屏幕的最下那一行
+        nG 20G 光标移动到这个文档的20行
+        n&lt;Enter&gt; n为数字。光标向下移动n行
+        /word  n 在该文档里面寻找 word这个字符串  (单个)  n:下一个  N:上一个   从上向下
+        ?word  n 从下向上
+        :n1,n2s/word1/word2/gc :n1到n2之间的替换 c:表示确认
+        x:光标处向后删除一位，X:光标出向前删除一位
+        nx:向后连续删除 n个数据
+        dd:删除光标处的那一行
+        d1G:删除光标所在到第一行的所有数据
+        dG:删除光标所在到最后一行的所有数据
+        yy:复制光标所在的那一行
+        nyy:n行
+        y1G:
+        yG:
+        p:下一行 P:上一行
+        Ctrl+r :重复上一个动作
+        u:还原上一步操作
+        .:重复前一个动作
+
+编辑模式：ioar IOAR
+
+指令列命令模式：:  /   ?   读取，存档等其他功能
+        :w 保存
+        :q 离开
+        :q! 不保存 强制离开
+        :wq 保存并离开
+        :e! 还原档案到最原始的状态
+        ZZ  保存离开 或离开
+        :w newfile :保存为新的文档
+        :set nu  显示行号
+        :set nonu 取消行号
+</code></pre><h4 id="shell"><a href="#shell" class="headerlink" title="shell"></a>shell</h4><pre><code>echo :查看变量  echo $testname   unset testname
+env:  列出目前的 shell 环境下的所有环境变量与其内容
+read: 键盘输入
+history: history n
+ls test*  :任意个字符
+ls test?  :接一个
+ls test???  :接三个
+cp test[1-5] /tmp  将 test1, test2, test3, test4, test5 若存在的话，就 贝到 /tmp
+cp test[!1-5] /tmp  只要不是 test1, test2, test3, test4, test5 之外的其它 test?
+echo $test | cut -d &apos;2&apos; -f 2  :截取，取第二个
+last | grep &apos;root&apos;  行操作(条件筛选)   -v 反过来
+grep &apos;redis&apos; 152.txt     grep -v &apos;redis&apos; 152.txt   -v 反过来
+grep -n &apos;t[ae]st&apos; regular_express.txt  包含:test 和taste
+cat /etc/passwd | sort
+split  cd ./ysy;  split -l 12 /Users/chenyazheng/desktop/linux_test/ysy/152.txt  aa
+文档的拆分  l: 行 12行  b: 大小 300K
+</code></pre><h4 id="shell-scripts"><a href="#shell-scripts" class="headerlink" title="shell scripts"></a>shell scripts</h4><pre><code>...
+</code></pre><h4 id="Linux账号与身份管理-未测试-小部分"><a href="#Linux账号与身份管理-未测试-小部分" class="headerlink" title="Linux账号与身份管理  (未测试,小部分)"></a>Linux账号与身份管理  (未测试,小部分)</h4><pre><code>newgrp users
+groups
+useradd
+passwd dmtsai (root给dmtsai修改密码)
+userdel -r username    连同使用者的家目录也一起删除
+groupadd
+groupdel
+su :切换管理员身份
+sudo :获取部分管理员权限
+</code></pre><p>参考 — 《鸟哥的Linux私房菜》</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Linux/" rel="tag"># Linux</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/15/多线程部分小结/" rel="next" title="多线程部分小结">
+                <i class="fa fa-chevron-left"></i> 多线程部分小结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/11/04/缓存部分小结/" rel="prev" title="缓存部分小结">
+                缓存部分小结 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/15/linux命令笔记/"
+           data-title="linux命令笔记" data-url="http://yoursite.com/2016/10/15/linux命令笔记/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/head_image.jpg"
+               alt="chenmanman" />
+          <p class="site-author-name" itemprop="name">chenmanman</p>
+          <p class="site-description motion-element" itemprop="description">等一场雨</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#基础指令操作"><span class="nav-number">1.</span> <span class="nav-text">基础指令操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#权限，组群"><span class="nav-number">2.</span> <span class="nav-text">权限，组群:</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#根目录下个文件夹结构"><span class="nav-number">3.</span> <span class="nav-text">根目录下个文件夹结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#档案和目录管理"><span class="nav-number">4.</span> <span class="nav-text">档案和目录管理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#档案内容查阅"><span class="nav-number">5.</span> <span class="nav-text">档案内容查阅</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#档案的压缩和打包"><span class="nav-number">6.</span> <span class="nav-text">档案的压缩和打包</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#vim"><span class="nav-number">7.</span> <span class="nav-text">vim</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shell"><span class="nav-number">8.</span> <span class="nav-text">shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#shell-scripts"><span class="nav-number">9.</span> <span class="nav-text">shell scripts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Linux账号与身份管理-未测试-小部分"><span class="nav-number">10.</span> <span class="nav-text">Linux账号与身份管理  (未测试,小部分)</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chenmanman</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chenmanman"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("ytqhqfWc5FgkujcTaFJy74qd-gzGzoHsz", "NuN029AE0uD0ORqva9tzYwXU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

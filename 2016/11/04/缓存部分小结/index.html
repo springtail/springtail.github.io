@@ -1,0 +1,1414 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Redis,Cache," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="https://springtail.github.io/favicon.ico" />
+
+
+
+
+
+
+<meta name="description" content="接触过的缓存:redis ,memcached ,ehcache，java 内存缓存
+这篇笔记以 redis为主，总结了自己项目中的代码，以及其他人博客中的实例，以及《redis的设计及实现》这本书。喜欢笔记的形式，可以提醒一下自己部分知识点，以及知识体系，这样。
+redis1.启动及检测及部分客户端命令redis 启动: ./redis-server  ../redis.conf (修改一下配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="缓存部分小结">
+<meta property="og:url" content="http://yoursite.com/2016/11/04/缓存部分小结/index.html">
+<meta property="og:site_name" content="一场雨">
+<meta property="og:description" content="接触过的缓存:redis ,memcached ,ehcache，java 内存缓存
+这篇笔记以 redis为主，总结了自己项目中的代码，以及其他人博客中的实例，以及《redis的设计及实现》这本书。喜欢笔记的形式，可以提醒一下自己部分知识点，以及知识体系，这样。
+redis1.启动及检测及部分客户端命令redis 启动: ./redis-server  ../redis.conf (修改一下配置">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/1.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/2.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/3.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/4.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/5.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/6.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/7.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/8.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/9.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/10.png">
+<meta property="og:image" content="http://springtail.github.io/images/redisImg/11.png">
+<meta property="og:updated_time" content="2016-11-25T12:47:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="缓存部分小结">
+<meta name="twitter:description" content="接触过的缓存:redis ,memcached ,ehcache，java 内存缓存
+这篇笔记以 redis为主，总结了自己项目中的代码，以及其他人博客中的实例，以及《redis的设计及实现》这本书。喜欢笔记的形式，可以提醒一下自己部分知识点，以及知识体系，这样。
+redis1.启动及检测及部分客户端命令redis 启动: ./redis-server  ../redis.conf (修改一下配置">
+<meta name="twitter:image" content="http://springtail.github.io/images/redisImg/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+
+
+
+  <title> 缓存部分小结 | 一场雨 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">一场雨</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">let it be beautiful</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/11/04/缓存部分小结/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="chenmanman">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/head_image.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="一场雨">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="一场雨" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                缓存部分小结
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-04T00:00:00+08:00">
+                2016-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2016/11/04/缓存部分小结/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/04/缓存部分小结/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2016/11/04/缓存部分小结/" class="leancloud_visitors" data-flag-title="缓存部分小结">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>接触过的缓存:redis ,memcached ,ehcache，java 内存缓存</p>
+<p>这篇笔记以 redis为主，总结了自己项目中的代码，以及其他人博客中的实例，以及《redis的设计及实现》这本书。喜欢笔记的形式，可以提醒一下自己部分知识点，以及知识体系，这样。</p>
+<h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><h3 id="1-启动及检测及部分客户端命令"><a href="#1-启动及检测及部分客户端命令" class="headerlink" title="1.启动及检测及部分客户端命令"></a>1.启动及检测及部分客户端命令</h3><pre><code>redis 启动: ./redis-server  ../redis.conf (修改一下配置文件)
+客户端: ./redis-cli
+是否启动: ps -ef |grep redis
+连接测试: ping
+服务器统计信息: info
+性能测试: redis-benchmark -n 1000  1000个请求
+
+String : SET keyname &quot;hello world&quot;  GET keyname
+HASH: HMSET keyname propOne &quot;value one&quot; propTwo 200
+LIST: LPUSH keyList &quot;one&quot; ,LPUSH keyList &quot;two&quot;
+SET: SADD keySet &quot;one&quot; , SADD keySet &quot;two&quot;
+有序集合: ZADD runoobkey 1 redis
+发布，订阅: SUBSCRIBE redisChat ,PUBLISH redisChat &quot;message&quot;
+</code></pre><p>参考:</p>
+<p>菜鸟教程 ：<a href="http://www.runoob.com/redis/redis-java.html" target="_blank" rel="external">http://www.runoob.com/redis/redis-java.html</a></p>
+<p>redis命令 ：<a href="http://www.redis.net.cn/order/" target="_blank" rel="external">http://www.redis.net.cn/order/</a></p>
+<h3 id="2-java中jedis的使用"><a href="#2-java中jedis的使用" class="headerlink" title="2.java中jedis的使用"></a>2.java中jedis的使用</h3><p>地址绑定的问题：    bind 127.0.0.1  这边可以注释掉</p>
+<p>protected-mode no 将保护关掉</p>
+<p>RedisConfig:</p>
+<pre><code>/**
+ * 初始化Redis连接池
+ */
+static {
+    try {
+        JedisPoolConfig config = new JedisPoolConfig();
+        config.setMaxWaitMillis(MAX_WAIT);
+        config.setMaxTotal(MAX_ACTIVE);
+        config.setMaxIdle(MAX_IDLE);
+        config.setTestOnBorrow(TEST_ON_BORROW);
+        jedisPool = new JedisPool(config, ADDR, PORT, TIMEOUT);
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
+
+/**
+ * 获取Jedis实例
+ * @return
+ */
+public synchronized static Jedis getJedis() {
+    try {
+        if (jedisPool != null) {
+            Jedis resource = jedisPool.getResource();
+            return resource;
+        } else {
+            return null;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+    }
+}
+</code></pre><p>TestRedis:</p>
+<pre><code>public class TestRedis {
+
+private static Jedis jedis;
+
+/**
+ * redis存储字符串
+ */
+
+public void testString() {
+    //-----添加数据----------  
+    jedis.set(&quot;name&quot;,&quot;chenmanman&quot;);  
+    System.out.println(jedis.get(&quot;name&quot;));
+
+    jedis.append(&quot;name&quot;, &quot; is my name&quot;); //拼接
+    System.out.println(jedis.get(&quot;name&quot;));
+
+    jedis.del(&quot;name&quot;);  //删除某个键
+    System.out.println(jedis.get(&quot;name&quot;));
+    //设置多个键值对
+    jedis.mset(&quot;name&quot;,&quot;chenmanman&quot;,&quot;age&quot;,&quot;26&quot;,&quot;qq&quot;,&quot;14*******5&quot;);
+    jedis.incr(&quot;age&quot;); //进行加1操作
+    System.out.println(jedis.get(&quot;name&quot;) + &quot;-&quot; + jedis.get(&quot;age&quot;) + &quot;-&quot; + jedis.get(&quot;qq&quot;));
+
+}
+
+/**
+ * redis操作Map
+ */
+
+public void testMap() {
+    //-----添加数据----------  
+    Map&lt;String, String&gt; map = new HashMap&lt;String, String&gt;();
+    map.put(&quot;name&quot;, &quot;chenmanman&quot;);
+    map.put(&quot;age&quot;, &quot;27&quot;);
+    map.put(&quot;qq&quot;, &quot;1491563275&quot;);
+    jedis.hmset(&quot;user&quot;,map);
+    //取出user中的name，执行结果:[minxr]--&gt;注意结果是一个泛型的List  
+    //第一个参数是存入redis中map对象的key，后面跟的是放入map中的对象的key，后面的key可以跟多个，是可变参数  
+      // List&lt;String&gt; rsmap = jedis.hmget(&quot;user&quot;, &quot;name&quot;, &quot;age&quot;, &quot;qq&quot;);
+    List&lt;String&gt; rsmap = jedis.hmget(&quot;user&quot;, &quot;name&quot;, &quot;age&quot;);
+    System.out.println(rsmap);  
+
+    //删除map中的某个键值  
+    jedis.hdel(&quot;user&quot;,&quot;age&quot;);//删除的是age
+    System.out.println(jedis.hmget(&quot;user&quot;, &quot;age&quot;)); //因为删除了，所以返回的是null  
+    System.out.println(jedis.hlen(&quot;user&quot;)); //返回key为user的键中存放的值的个数2
+    System.out.println(jedis.exists(&quot;user&quot;));//是否存在key为user的记录 返回true  
+    System.out.println(jedis.hkeys(&quot;user&quot;));//返回map对象中的所有key  
+    System.out.println(jedis.hvals(&quot;user&quot;));//返回map对象中的所有value
+
+    Iterator&lt;String&gt; iter=jedis.hkeys(&quot;user&quot;).iterator();  
+    while (iter.hasNext()){  
+        String key = iter.next();  
+        System.out.println(key+&quot;:&quot;+jedis.hmget(&quot;user&quot;,key));  
+    }  
+}
+
+/**
+ * jedis操作List
+ */  
+
+public void testList(){  
+    //开始前，先移除所有的内容  
+    jedis.del(&quot;java framework&quot;);  
+    System.out.println(jedis.lrange(&quot;java framework&quot;,0,-1));  
+
+    //  Add the string value to the head (LPUSH) or tail (RPUSH) of the list stored at key.
+    //  If the key does not exist an empty list is created just before the append operation.
+    //  If the key exists but is not a List an error is returned.
+
+    //先向key java framework中存放三条数据  
+    jedis.lpush(&quot;java framework&quot;,&quot;spring&quot;);  
+    jedis.lpush(&quot;java framework&quot;,&quot;struts&quot;);  
+    jedis.lpush(&quot;java framework&quot;,&quot;hibernate&quot;);
+    jedis.lpush(&quot;java framework&quot;,&quot;hibernate&quot;);  //可以有重复的
+    // 再取出所有数据jedis.lrange是按范围取出，  
+    // 第一个是key，第二个是起始位置，第三个是结束位置，jedis.llen获取长度 -1表示取得所有  
+    System.out.println(jedis.lrange(&quot;java framework&quot;,0,-1));  
+
+    jedis.del(&quot;java framework&quot;);
+    jedis.rpush(&quot;java framework&quot;,&quot;spring&quot;);  
+    jedis.rpush(&quot;java framework&quot;,&quot;struts&quot;);  
+    jedis.rpush(&quot;java framework&quot;,&quot;hibernate&quot;);
+    System.out.println(jedis.lrange(&quot;java framework&quot;,0,-1));
+}  
+
+/**
+ * jedis操作Set
+ */  
+
+public void testSet(){  
+    //添加  
+    jedis.sadd(&quot;user&quot;,&quot;chenmanman&quot;);  
+    jedis.sadd(&quot;user&quot;,&quot;chenxiaoman&quot;);  
+    jedis.sadd(&quot;user&quot;,&quot;kyzeng&quot;);  
+    jedis.sadd(&quot;user&quot;,&quot;chenxiaoxiao&quot;);
+    //移除noname  
+    jedis.srem(&quot;user&quot;,&quot;chenxiaoxiao&quot;);  
+    System.out.println(jedis.smembers(&quot;user&quot;));//获取所有加入的value  
+    System.out.println(jedis.sismember(&quot;user&quot;, &quot;chenxiaoxiao&quot;));//判断 who 是否是user集合的元素  
+    System.out.println(jedis.srandmember(&quot;user&quot;));//随机的
+    System.out.println(jedis.scard(&quot;user&quot;));//返回集合的元素个数  
+}  
+
+
+public void test() throws InterruptedException {  
+    //jedis 排序  
+    //注意，此处的rpush和lpush是List的操作。是一个双向链表（但从表现来看的）  
+    jedis.del(&quot;a&quot;);//先清除数据，再加入数据进行测试  
+    jedis.rpush(&quot;a&quot;, &quot;1&quot;);  
+    jedis.lpush(&quot;a&quot;,&quot;6&quot;);  
+    jedis.lpush(&quot;a&quot;,&quot;3&quot;);  
+    jedis.lpush(&quot;a&quot;,&quot;9&quot;);  
+    System.out.println(jedis.lrange(&quot;a&quot;,0,-1));// [9, 3, 6, 1]  
+    System.out.println(jedis.sort(&quot;a&quot;)); //[1, 3, 6, 9]  //输入排序后结果  
+    System.out.println(jedis.lrange(&quot;a&quot;,0,-1));  
+}  
+
+public void testRedisPool() {
+    RedisConfig.getJedis().set(&quot;newname&quot;, &quot;中文测试&quot;);
+    System.out.println(RedisConfig.getJedis().get(&quot;newname&quot;));
+}
+
+
+
+public static void main(String[] args) {
+
+    //这边需要注意的是 数据的清空，FLUSHALL cli端的操作
+
+    //或者是 jedis.del(&quot;a&quot;);//先清除数据，再加入数据进行测试  
+
+    RedisConfig rc =new RedisConfig();
+
+    jedis  =  RedisConfig.getJedis();
+
+      // jedis.set(&quot;name&quot;,&quot;chenmanman&quot;);
+
+    // System.out.println(jedis.get(&quot;name&quot;));//执行结果：xinxin  
+
+    TestRedis tr =new TestRedis();
+
+    // tr.testString();
+
+    // tr.testMap();
+
+    // tr.testList();
+
+    // tr.testSet();
+
+    try {
+        tr.test();
+    } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+    }
+  }
+}
+</code></pre><p>参考文章:</p>
+<p><a href="http://www.cnblogs.com/liuling/p/2014-4-19-04.html" target="_blank" rel="external">Java中使用Jedis操作Redis</a></p>
+<p>jedis 的API：<a href="http://tool.oschina.net/uploads/apidocs/" target="_blank" rel="external">http://tool.oschina.net/uploads/apidocs/</a></p>
+<h3 id="3-redis的设计及实现"><a href="#3-redis的设计及实现" class="headerlink" title="3.redis的设计及实现"></a>3.redis的设计及实现</h3><h4 id="1-数据结构部分"><a href="#1-数据结构部分" class="headerlink" title="1.数据结构部分"></a>1.数据结构部分</h4><h5 id="a-字符串"><a href="#a-字符串" class="headerlink" title="a.字符串"></a>a.字符串</h5><p>free ：未使用的空间<br>len ：保存的字符串的长度<br>buf ：字符串</p>
+<p>1).常数复杂度获取字符串的长度。 len<br>2).杜绝缓冲区溢出  检查free区的大小<br>3).减少修改字符串长度时所需的内存重分配的次数  空间预分配：多分配一部分 惰性空间释放：使用free接收</p>
+<h5 id="b-链表"><a href="#b-链表" class="headerlink" title="b.链表"></a>b.链表</h5><p>head : 表头指针<br>tail : 表尾指针<br>len  : 链表长度计数器<br>dup,free,match 成员则是用于实现多态链表所需的类型特定函数(复制，释放，比较)</p>
+<h5 id="c-字典"><a href="#c-字典" class="headerlink" title="c.字典"></a>c.字典</h5><p>当要将一个新的键值对添加到字典里面时，程序需要先根据键值对的键计算出哈希值和索引值，然后再根据索引值，将包含新键值对的哈希表节点放到哈希表数组指定的索引上面。</p>
+<p><img src="http://springtail.github.io/images/redisImg/1.png" alt="Alt text"></p>
+<p>当键被分配到同一个索引上的时候，就是键冲突，使用链表解决。</p>
+<p><img src="http://springtail.github.io/images/redisImg/2.png" alt="Alt text"></p>
+<p>rehash操作：实现哈希表的拓展和收缩</p>
+<p>拓展，迁移之后，将ht[1]设置为ht[0],然后为ht[1]分配一个空白哈希表</p>
+<p><img src="http://springtail.github.io/images/redisImg/3.png" alt="Alt text"></p>
+<p>渐进式 rehash</p>
+<h5 id="d-跳跃表"><a href="#d-跳跃表" class="headerlink" title="d.跳跃表"></a>d.跳跃表</h5><p>header: 指向跳跃表的表头节点</p>
+<p>tail: 指向跳跃表的表尾节点</p>
+<p>level: 层数最大的节点的层数</p>
+<p>length: 包含的节点数量（表头节点不算）</p>
+<p>层: 前进指针 和 后退指针   跨度：指向和当前的节点间的距离  计算排位</p>
+<p>分值: 节点中保存分值 跳跃表中，节点按照各自所保存的分值从小到大排列</p>
+<p>成员对象: 保存的成员对象</p>
+<p><img src="http://springtail.github.io/images/redisImg/4.png" alt="Alt text"></p>
+<h5 id="整数集合-intset"><a href="#整数集合-intset" class="headerlink" title="整数集合 intset"></a>整数集合 intset</h5><p>encoding : 底层整数集合的实现类型</p>
+<p>length : 长度</p>
+<p>contents : 数据从小到大排列</p>
+<p>升级的三步骤</p>
+<p>1.根据新元素的类型，扩展整数集合底层数组的空间大小，并为新元素分配空间</p>
+<p>2.将底层的所有元素换成与新元素相同的类型，并将转换后的新元素放到正确的位置，保持有序性不变</p>
+<p>3.将新元素添加到底层数组里面</p>
+<h5 id="压缩列表"><a href="#压缩列表" class="headerlink" title="压缩列表"></a>压缩列表</h5><p><img src="http://springtail.github.io/images/redisImg/5.png" alt="Alt text"></p>
+<p>压缩列表节点的构成 : previous_entry_length (前一个节点的长度，可以根据当前节点计算出前一个节点的起始位置) ,encoding (数据类型及范围长度), content</p>
+<p>连锁更新</p>
+<h5 id="对象"><a href="#对象" class="headerlink" title="对象"></a>对象</h5><p>对象 : type属性, 编码属性, ptr属性</p>
+<p>类型 : 对象的类型  value 保存的数据的类型</p>
+<p>编码 : 对象使用了什么底层数据结构作为对象的底层实现</p>
+<p><img src="http://springtail.github.io/images/redisImg/6.png" alt="Alt text"></p>
+<h4 id="单机数据库的实现"><a href="#单机数据库的实现" class="headerlink" title="单机数据库的实现"></a>单机数据库的实现</h4><p><img src="http://springtail.github.io/images/redisImg/7.png" alt="Alt text"></p>
+<p>切换数据库: 客户端执行 select 2</p>
+<p>数据库数据的添加</p>
+<p><img src="http://springtail.github.io/images/redisImg/8.png" alt="Alt text"></p>
+<h5 id="过期时间"><a href="#过期时间" class="headerlink" title="过期时间"></a>过期时间</h5><p>键的生存时间和过期时间    EXPIRE PEXPIRE设置过期时间 TTL PLLT返回剩余时间</p>
+<p>redisDb 结构的expires 字典保存了数据库中的所有的过期时间，即过期字典。(key - value结构)</p>
+<p><img src="http://springtail.github.io/images/redisImg/9.png" alt="Alt text"></p>
+<p>PERSIST 解除键和值在过期字典中的关联。</p>
+<p>过期键删除策略：定时删除(定时器)，惰性删除(取用时检测并删除，不用的过期键依然保存)，定期删除</p>
+<p>save 和 bgsave 生成rdb文件时只会保存未过期的数据。rdb文件载入时，只载入未过期的（主服务器模式）；rdb文件载入时，全部载入（从服务器模式）；</p>
+<p>AOF文件写入<br>当服务器以AOF持久化模式运行时，如果数据库的某个键已过期，但是它还没有被惰性删除或者定期删除，那么AOF文件不会因为这个过期键而产生任何影响。<br>当过期键被惰性删除或者被定期删除之后，程序会向AOF文件追加一条DEL命令，来显式的记录该键已被删除。</p>
+<p>AOF的重写 和生成RDB文件类似，过期不写。</p>
+<p>数据库通知：可以让客户端通过订阅给定的频道或者模式，来获知数据库中键的变化，以及数据库命令的执行情况。</p>
+<p>SUBSCRIBE <em> </em> keyevent@0<em> </em>:del  (订阅0号库中所有的del命令)</p>
+<p>SUBSCRIBE <em> </em> keyspace@0<em> </em>:message  (订阅0号库中对message的操作)</p>
+<h4 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h4><p>RDB持久化:save 和 bgsave</p>
+<p>save 命令会阻塞Redis服务进程</p>
+<p>bgsave 会派生出一个子进程来负责创建RDB文件   dump.rdb文件</p>
+<p>RDB文件的载入工作是在服务器启动时自动执行的，所以redis并没有专门用于载入RDB文件的命令</p>
+<p>AOF文件的更新频率通常比RDB文件的更新频率更高，所以：如果服务器开启了AOF功能，那么服务器会优先使用AOF文件来还原数据库状态。只有AOF持久化功能关闭，服务器才会使用RDB文件来还原数据库状态</p>
+<p>服务器载入RDB文件时，会一直处于阻塞状态，直到载入工作结束为止。</p>
+<p>自动间隔性保存  save 300 10  300秒内对数据库至少进行10次修改，就执行save操作</p>
+<p>dirty , lastsave   (计数,最新的save的时间)</p>
+<p>RDB文件的结构：REDIS(开头),db_version(RDB版本号),databases(0个或多个数据库),EOF(正文部分的结束),check_num(校验位)</p>
+<p>od -c dump.rdb 打印RDB文件</p>
+<p>dump.rdb  生成文件是在src下,做文件恢复的时候 ，将备份文件 (dump.rdb) 移动到 redis 安装目录并启动服务即可。</p>
+<p>bgsave 和save 生成的文件在同一个位置，都叫(dump.rdb)</p>
+<h4 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h4><p>因为AOF持久化是通过保存被执行的写命令来记录数据库状态的。</p>
+<p>AOF文件的写入与同步: 数据先在aof_buf缓冲区，然后再同步到AOF文件中去 (always, everysec, no)</p>
+<p>AOF文件的载入与数据的还原: 将之前的命令重新执行了一遍</p>
+<p>AOF文件重写: 直接读取数据库状态</p>
+<p>子进程处理数据的时候，主线程还在数据处理,会造成数据库状态不一致的情况</p>
+<p>在AOF重写期间，服务器进程执行三个操作：执行客户端发过来的操作；将执行后的命令追加到aof缓冲区；将执行过的命令追加到aof重写缓冲区；</p>
+<p>重写结束之后，将aof重写缓冲区的内容写入新的aof文件中，用新的aof文件替换老的AOF文件。</p>
+<p>命令请求会保存到aof缓存区里面，之后再定期写入并同步到AOF文件中</p>
+<p>服务器只要载入并重新执行保存在aof文件中的命令，就可以还原数据库本来的状态</p>
+<h4 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h4><h5 id="文件事件：服务器对套接字操作的抽象"><a href="#文件事件：服务器对套接字操作的抽象" class="headerlink" title="文件事件：服务器对套接字操作的抽象"></a>文件事件：服务器对套接字操作的抽象</h5><p><img src="http://springtail.github.io/images/redisImg/10.png" alt="Alt text"></p>
+<p>I/O多路复用程序通过队列向文件事件分派器传送套接字，并根据套接字产生的事件的类型，调用相应的事件处理器。</p>
+<h5 id="时间事件：服务器对定时操作的抽象"><a href="#时间事件：服务器对定时操作的抽象" class="headerlink" title="时间事件：服务器对定时操作的抽象"></a>时间事件：服务器对定时操作的抽象</h5><p>定时事件，周期性事件</p>
+<p>当时间事件执行器运行的时候，他必须遍历链表中的所有的时间事件，这样才能确保服务器中所有已到达的时间事件都会被处理。</p>
+<p>链表并不是按照时间属性的大小排序的</p>
+<h4 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h4><p>Redis 通过监听一个 TCP 端口或者 Unix socket 的方式来接收来自客户端的连接，当一个连接建立后，Redis 内部会进行以下一些操作：</p>
+<p>1.首先，客户端 socket 会被设置为非阻塞模式，因为 Redis 在网络事件处理上采用的是非阻塞多路复用模型。</p>
+<p>2.然后为这个 socket 设置 TCP_NODELAY 属性，禁用 Nagle 算法</p>
+<p>3.然后创建一个可读的文件事件用于监听这个客户端 socket 的数据发送</p>
+<h4 id="服务器"><a href="#服务器" class="headerlink" title="服务器"></a>服务器</h4><hr>
+<h4 id="发布和订阅"><a href="#发布和订阅" class="headerlink" title="发布和订阅"></a>发布和订阅</h4><p>Redis 发布订阅(pub/sub)是一种消息通信模式：发送者(pub)发送消息，订阅者(sub)接收消息</p>
+<p>SUBSCRIBE testc :订阅testc</p>
+<p>PUBLISH testc “message_one” :发布</p>
+<p>UNSUBSCRIBE testc : 退订</p>
+<p><img src="http://springtail.github.io/images/redisImg/11.png" alt="Alt text"></p>
+<h4 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h4><p>一个事务从开始到执行经历的三个阶段:开始事务,命令入队,执行事务</p>
+<h2 id="memcached-后端"><a href="#memcached-后端" class="headerlink" title="memcached (后端)"></a>memcached (后端)</h2><p>brew install memcached</p>
+<p>指定端口启动  memcached -p 8000</p>
+<p>后台启动  memcached -d -p 8000</p>
+<p>memcache (前端)</p>
+<p>java-memcached :jar包的生成 maven 打包</p>
+<p>测试代码 ：</p>
+<pre><code>package testmodel;
+
+import com.danga.MemCached.MemCachedClient;
+import com.danga.MemCached.SockIOPool;
+
+public class MyCache {  
+
+  public static void main(String[] args) {  //这个是memcache的一个测试的demo,之后可以考虑的是用aop去实现它
+    MemCachedClient client=new MemCachedClient();  
+    String [] addr ={&quot;127.0.0.1:8000&quot;};  
+    Integer [] weights = {3};  
+    SockIOPool pool = SockIOPool.getInstance();  
+    pool.setServers(addr);  
+    pool.setWeights(weights);  
+    pool.setInitConn(5);  
+    pool.setMinConn(5);  
+    pool.setMaxConn(200);  
+    pool.setMaxIdle(1000*30*30);  
+    pool.setMaintSleep(30);  
+    pool.setNagle(false);  
+    pool.setSocketTO(30);  
+    pool.setSocketConnectTO(0);  
+    pool.initialize();  
+
+    //String [] s  =pool.getServers();  
+    //client.setCompressEnable(true);  
+    //client.setCompressThreshold(1000*1024);  
+
+    //将数据放入缓存  
+    TestBean bean=new TestBean();  
+    bean.setName(&quot;name1&quot;);  
+    bean.setAge(25);  
+    client.add(&quot;bean1&quot;, bean);  
+
+    //获取缓存数据  
+    TestBean beanClient=(TestBean)client.get(&quot;bean1&quot;);  
+    System.out.println(beanClient.getName());  
+  }  
+}
+</code></pre><h2 id="ehcache"><a href="#ehcache" class="headerlink" title="ehcache"></a>ehcache</h2><p>ehcache.xml:</p>
+<pre><code>&lt;ehcache xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:noNamespaceSchemaLocation=&quot;ehcache.xsd&quot;&gt;
+
+      &lt;diskStore path=&quot;java.io.tmpdir&quot;/&gt;
+
+      &lt;defaultCache
+            maxElementsInMemory=&quot;10000&quot;
+            eternal=&quot;false&quot;
+            timeToIdleSeconds=&quot;120&quot;
+            timeToLiveSeconds=&quot;120&quot;
+            overflowToDisk=&quot;true&quot;
+            diskPersistent=&quot;false&quot;
+            diskExpiryThreadIntervalSeconds=&quot;120&quot;
+            memoryStoreEvictionPolicy=&quot;LRU&quot;
+            /&gt;
+      &lt;cache name=&quot;serviceCache&quot;
+        maxElementsInMemory=&quot;20000&quot;
+        eternal=&quot;false&quot;
+        overflowToDisk=&quot;true&quot;
+        timeToIdleSeconds=&quot;300&quot;
+        timeToLiveSeconds=&quot;600&quot;
+        memoryStoreEvictionPolicy=&quot;LRU&quot; /&gt;
+&lt;/ehcache&gt;
+</code></pre><p>ehcache.xsd 配置略</p>
+<p>测试代码：用的切面</p>
+<pre><code>@Around(&quot;@annotation(cacheable)&quot;)
+public Object cacheable(final ProceedingJoinPoint pjp, final Cacheable cacheable) throws Throwable {
+
+  if(cacheable.cacheOperation() == CacheOperation.NOP) {
+    return pjp.proceed();
+  }
+  String group = cacheable.group().getName(),
+      cacheKey = getCacheKey(pjp);
+  Cache cache = getCache(group);
+  Object result = null;
+  if(cacheable.cacheOperation() == CacheOperation.CACHING) {
+        Element element = cache.get(cacheKey);
+        if(element == null) {
+          result = pjp.proceed();
+            if(result == null || result instanceof Serializable) {
+              element = new Element(cacheKey, (Serializable)result);
+              LOG.info(&quot;正在缓存{0}对象。&quot;, cacheKey);
+              cache.put(element);
+            }else {
+              LOG.warn(&quot;{0}指定方法返回对象{1}不能被序列化，不能缓存。&quot;, cacheKey, result);
+            }
+        }else {
+          LOG.info(&quot;从缓存中获取{0}对象。&quot;, cacheKey);
+          result = element.getObjectValue();
+        }
+  }else if(cacheable.cacheOperation() == CacheOperation.FLUSH_CACHE) {
+        result = pjp.proceed();
+        for(Class&lt;? extends Entity&gt; clazz : cacheable.flushGroup()) {
+          String groupName = clazz.getName();
+          if(!groupName.equals(group)) {
+            LOG.info(&quot;删除缓存组{0}所有的缓存对象。&quot;, groupName);
+            getCache(group).removeAll();
+          }
+
+        }
+        LOG.info(&quot;删除缓存组{0}所有的缓存对象。&quot;, group);
+        cache.removeAll();
+  }
+  return result;
+}
+</code></pre><h2 id="java-内存缓存"><a href="#java-内存缓存" class="headerlink" title="java 内存缓存 :"></a>java 内存缓存 :</h2><p>测试代码：</p>
+<p>private CacheManager cacheManager = MapCacheManager.getInstance();</p>
+<p>Cache cache = cacheManager.nativeCache(“failPushContent”);</p>
+<p>实现类：</p>
+<pre><code>public class MapCacheManager implements CacheManager{
+
+    private ConcurrentHashMap&lt;String, MapCache&gt; cacheMap = new ConcurrentHashMap&lt;String, MapCache&gt;(0);
+
+    private static Logger logger = LoggerFactory.getLogger(MapCacheManager.class);
+
+    private static MapCacheManager manager;
+
+    private static final long STTLONG = 1000L*60*60*24*365;
+
+    private MapCacheManager(){
+
+    }
+
+    public static MapCacheManager getInstance(){
+        synchronized (MapCacheManager.class) {
+            if(null == manager)
+                manager = new MapCacheManager();
+            return manager;
+        }
+    }
+
+    @Override
+    public List&lt;String&gt; names() throws CacheException {
+        return new ArrayList&lt;String&gt;(cacheMap.keySet());
+    }
+
+    @Override
+    public Cache nativeCache(String cacheName) throws CacheException {
+        return nativeCache(cacheName,STTLONG);
+    }
+
+    @Override
+    public Cache nativeCache(String cacheName,long expiredTime) throws CacheException {
+        synchronized (cacheMap){
+            if(!cacheMap.containsKey(cacheName)){
+                cacheMap.put(cacheName, new MapCache(cacheName));
+
+                logger.info(&quot;********nativeCache******: no containsKey&quot;);
+
+            }
+            logger.info(&quot;********nativeCache******: out&quot;);
+
+            MapCache mapCache = cacheMap.get(cacheName);
+            mapCache.setExpiredTime(expiredTime);
+            return mapCache;
+        }
+    }
+
+    @Override
+    public void clear() throws CacheException {
+        cacheMap.clear();
+    }
+
+}
+</code></pre><p>MapCache：</p>
+<pre><code>public class MapCache implements Cache{
+
+    private static final  long EXPIREDTIME = 1000L*60*60*24*365;
+
+    private static final int param1 = 10;
+
+    private final ConcurrentHashMap&lt;Object, Object&gt; store;
+
+    private long expiredTime;
+
+    public void setExpiredTime(long expiredTime) {
+        this.expiredTime = expiredTime;
+    }
+
+    private final String name;
+
+    private CacheEntity cacheEntity;
+
+    private String encryptKey;
+
+    /**
+     * @param name 缓存名称
+     */
+    public MapCache(String name){
+        this(name,EXPIREDTIME,new ConcurrentHashMap&lt;Object,Object&gt;(param1));
+    }
+
+    /**
+     * @param name 缓存名称
+     * @param expiredTime 缓存过期时间
+     */
+    public MapCache(String name,long expiredTime){
+        this(name,expiredTime,new ConcurrentHashMap&lt;Object,Object&gt;(param1));
+    }
+
+    /**
+     * @param name 缓存名称
+     * @param expiredTime 缓存过期时间
+     * @param store 缓存存储器
+     */
+    public MapCache(String name, long expiredTime, ConcurrentHashMap&lt;Object, Object&gt; store){
+        this.store = store;
+        this.expiredTime = expiredTime;
+        this.name = name;
+    }
+
+    /**
+     * 返回当前缓存姓名
+     */
+    public String name(){
+        return this.name;
+    }
+
+    /**
+     * 添加对象到缓存中
+     */
+    @Override
+    public void put(Object value,Object... key) throws CacheException {
+        cacheEntity = new CacheEntity(value);
+        encryptKey = generateKey(key);
+        store.put(encryptKey, cacheEntity);
+    }
+
+    /**
+     * 获得指定键的缓存
+     */
+    @Override
+    public Object get(Object... key) throws CacheException {
+        encryptKey = generateKey(key);
+        cacheEntity = (CacheEntity)store.get(encryptKey);
+
+        if(cacheEntity == null){
+
+            return &quot;noValue&quot;;
+
+        }
+
+        if(System.currentTimeMillis() - cacheEntity.getTimeInMillIs() &gt; expiredTime){
+            store.remove(encryptKey);
+            return &quot;noValue&quot;;
+        }
+        return cacheEntity.getCacheObject();
+    }
+
+    @Override
+    public Object getOut(Object... key) throws CacheException {
+
+        encryptKey = generateKey(key);
+        cacheEntity = (CacheEntity)store.get(encryptKey);
+
+        if(cacheEntity == null){
+
+            return &quot;noValue&quot;;
+
+        }
+
+        if(System.currentTimeMillis() - cacheEntity.getTimeInMillIs() &gt; expiredTime){
+            store.remove(encryptKey);
+            return &quot;noValue&quot;;
+        }
+
+        Object re=    cacheEntity.getCacheObject();
+
+        store.remove(encryptKey);//清空
+
+        return re;
+    }
+
+    @Override
+    public void remove(Object... key) throws CacheException {
+        encryptKey = generateKey(key);
+        store.remove(encryptKey);
+    }
+
+    @Override
+    public boolean containsKey(Object... key) throws CacheException {
+        return store.containsKey(generateKey(key));
+    }
+
+    /**
+     * 生成缓存加密键
+     * @param key
+     * @return
+     */
+    private String generateKey(Object... key){
+        Assert.isTrue(null != key, &quot;缓存键值不可为空&quot;);
+        StringBuilder result = new StringBuilder();
+        try {
+            MessageDigest md = MessageDigest.getInstance(&quot;MD5&quot;);
+            byte[] bytes = md.digest(JSON.toJSONString(new KeyEntity(key)).getBytes());
+            for (byte b : bytes) {
+                String hex = Integer.toHexString(b &amp; 0xFF);
+                if (hex.length() == 1)
+                    result.append(&quot;0&quot;);
+                result.append(hex);
+            }
+            return result.toString();
+
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+        }
+        return result.toString();
+    }
+
+    class KeyEntity{
+
+        private List&lt;Object&gt; keys = new ArrayList&lt;Object&gt;();
+
+        KeyEntity(Object... keys){
+            this.keys.addAll(Arrays.asList(keys));
+        }
+
+        public List&lt;Object&gt; getKeys() {
+            return keys;
+        }
+
+        public void setKeys(List&lt;Object&gt; keys) {
+            this.keys = keys;
+        }
+
+    }
+
+}
+</code></pre>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Redis/" rel="tag"># Redis</a>
+          
+            <a href="/tags/Cache/" rel="tag"># Cache</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/15/linux命令笔记/" rel="next" title="linux命令笔记">
+                <i class="fa fa-chevron-left"></i> linux命令笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/04/缓存部分小结/"
+           data-title="缓存部分小结" data-url="http://yoursite.com/2016/11/04/缓存部分小结/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/head_image.jpg"
+               alt="chenmanman" />
+          <p class="site-author-name" itemprop="name">chenmanman</p>
+          <p class="site-description motion-element" itemprop="description">等一场雨</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">18</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#redis"><span class="nav-number">1.</span> <span class="nav-text">redis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-启动及检测及部分客户端命令"><span class="nav-number">1.1.</span> <span class="nav-text">1.启动及检测及部分客户端命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-java中jedis的使用"><span class="nav-number">1.2.</span> <span class="nav-text">2.java中jedis的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-redis的设计及实现"><span class="nav-number">1.3.</span> <span class="nav-text">3.redis的设计及实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-数据结构部分"><span class="nav-number">1.3.1.</span> <span class="nav-text">1.数据结构部分</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#a-字符串"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">a.字符串</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#b-链表"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">b.链表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#c-字典"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">c.字典</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#d-跳跃表"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">d.跳跃表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#整数集合-intset"><span class="nav-number">1.3.1.5.</span> <span class="nav-text">整数集合 intset</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#压缩列表"><span class="nav-number">1.3.1.6.</span> <span class="nav-text">压缩列表</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#对象"><span class="nav-number">1.3.1.7.</span> <span class="nav-text">对象</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#单机数据库的实现"><span class="nav-number">1.3.2.</span> <span class="nav-text">单机数据库的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#过期时间"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">过期时间</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RDB持久化"><span class="nav-number">1.3.3.</span> <span class="nav-text">RDB持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#AOF持久化"><span class="nav-number">1.3.4.</span> <span class="nav-text">AOF持久化</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事件"><span class="nav-number">1.3.5.</span> <span class="nav-text">事件</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#文件事件：服务器对套接字操作的抽象"><span class="nav-number">1.3.5.1.</span> <span class="nav-text">文件事件：服务器对套接字操作的抽象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#时间事件：服务器对定时操作的抽象"><span class="nav-number">1.3.5.2.</span> <span class="nav-text">时间事件：服务器对定时操作的抽象</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#客户端"><span class="nav-number">1.3.6.</span> <span class="nav-text">客户端</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#服务器"><span class="nav-number">1.3.7.</span> <span class="nav-text">服务器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#发布和订阅"><span class="nav-number">1.3.8.</span> <span class="nav-text">发布和订阅</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务"><span class="nav-number">1.3.9.</span> <span class="nav-text">事务</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#memcached-后端"><span class="nav-number">2.</span> <span class="nav-text">memcached (后端)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ehcache"><span class="nav-number">3.</span> <span class="nav-text">ehcache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#java-内存缓存"><span class="nav-number">4.</span> <span class="nav-text">java 内存缓存 :</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chenmanman</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chenmanman"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("ytqhqfWc5FgkujcTaFJy74qd-gzGzoHsz", "NuN029AE0uD0ORqva9tzYwXU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

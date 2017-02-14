@@ -68,7 +68,7 @@
 <link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Linux,aliyun,node," />
+  <meta name="keywords" content="zookeeper," />
 
 
 
@@ -84,25 +84,53 @@
 
 
 
-<meta name="description" content="node环境配置 node:http://nodejs.cn/download/package-manager/ 按照官网的配置就好
- mongodb环境的配置:http://my.oschina.net/chinaearl/blog/111077?fromerr=MgE0tzjt
- tar zxvf mongodb-linux-x86_64-2.2.3.tgz
- cd /usr/local/mo">
+<meta name="description" content="几个注意点：
+使用版本来阻止并行操作的不一致性：
+1.客户端c1写入了第一个版本的/config。
+2.客户端c2读取了/config并写入了第二个版本。
+3.客户端c1尝试对/config进行写入，但因版本号不匹配二请求失败。
+
+zookeeper架构总览
+
+客户端重连 (通过zxid去匹配)
+1.客户端连接s1
+2.客户端执行创建操作。操作成功并获得服务器分配的zxid 1.
+3.客户端与s1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="服务器配置">
-<meta property="og:url" content="http://yoursite.com/2016/05/11/服务器配置/index.html">
+<meta property="og:title" content="zookeeper笔记">
+<meta property="og:url" content="http://yoursite.com/2016/10/21/zookeeper笔记/index.html">
 <meta property="og:site_name" content="一场雨">
-<meta property="og:description" content="node环境配置 node:http://nodejs.cn/download/package-manager/ 按照官网的配置就好
- mongodb环境的配置:http://my.oschina.net/chinaearl/blog/111077?fromerr=MgE0tzjt
- tar zxvf mongodb-linux-x86_64-2.2.3.tgz
- cd /usr/local/mo">
-<meta property="og:updated_time" content="2016-11-24T01:11:02.000Z">
+<meta property="og:description" content="几个注意点：
+使用版本来阻止并行操作的不一致性：
+1.客户端c1写入了第一个版本的/config。
+2.客户端c2读取了/config并写入了第二个版本。
+3.客户端c1尝试对/config进行写入，但因版本号不匹配二请求失败。
+
+zookeeper架构总览
+
+客户端重连 (通过zxid去匹配)
+1.客户端连接s1
+2.客户端执行创建操作。操作成功并获得服务器分配的zxid 1.
+3.客户端与s1">
+<meta property="og:image" content="http://springtail.github.io/images/zookeeper/version-check.png">
+<meta property="og:image" content="http://springtail.github.io/images/zookeeper/zookeeper_framework.png">
+<meta property="og:image" content="http://springtail.github.io/images/zookeeper/client_connect.png">
+<meta property="og:updated_time" content="2017-02-14T10:38:15.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="服务器配置">
-<meta name="twitter:description" content="node环境配置 node:http://nodejs.cn/download/package-manager/ 按照官网的配置就好
- mongodb环境的配置:http://my.oschina.net/chinaearl/blog/111077?fromerr=MgE0tzjt
- tar zxvf mongodb-linux-x86_64-2.2.3.tgz
- cd /usr/local/mo">
+<meta name="twitter:title" content="zookeeper笔记">
+<meta name="twitter:description" content="几个注意点：
+使用版本来阻止并行操作的不一致性：
+1.客户端c1写入了第一个版本的/config。
+2.客户端c2读取了/config并写入了第二个版本。
+3.客户端c1尝试对/config进行写入，但因版本号不匹配二请求失败。
+
+zookeeper架构总览
+
+客户端重连 (通过zxid去匹配)
+1.客户端连接s1
+2.客户端执行创建操作。操作成功并获得服务器分配的zxid 1.
+3.客户端与s1">
+<meta name="twitter:image" content="http://springtail.github.io/images/zookeeper/version-check.png">
 
 
 
@@ -134,7 +162,7 @@
 
 
 
-  <title> 服务器配置 | 一场雨 </title>
+  <title> zookeeper笔记 | 一场雨 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -255,7 +283,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/05/11/服务器配置/">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/21/zookeeper笔记/">
 
   <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <meta itemprop="name" content="chenmanman">
@@ -279,7 +307,7 @@
             
             
               
-                服务器配置
+                zookeeper笔记
               
             
           </h1>
@@ -292,8 +320,8 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-11T19:19:37+08:00">
-                2016-05-11
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-21T00:00:00+08:00">
+                2016-10-21
               </time>
             
 
@@ -308,8 +336,8 @@
             
               <span class="post-comments-count">
                 <span class="post-meta-divider">|</span>
-                <a href="/2016/05/11/服务器配置/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/11/服务器配置/" itemprop="commentCount"></span>
+                <a href="/2016/10/21/zookeeper笔记/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/21/zookeeper笔记/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -319,7 +347,7 @@
 
           
           
-             <span id="/2016/05/11/服务器配置/" class="leancloud_visitors" data-flag-title="服务器配置">
+             <span id="/2016/10/21/zookeeper笔记/" class="leancloud_visitors" data-flag-title="zookeeper笔记">
                <span class="post-meta-divider">|</span>
                <span class="post-meta-item-icon">
                  <i class="fa fa-eye"></i>
@@ -344,27 +372,162 @@
       
 
       
-        <h2 id="node环境配置"><a href="#node环境配置" class="headerlink" title="node环境配置"></a>node环境配置</h2><p> node:<a href="http://nodejs.cn/download/package-manager/" target="_blank" rel="external">http://nodejs.cn/download/package-manager/</a> 按照官网的配置就好</p>
-<p> mongodb环境的配置:<a href="http://my.oschina.net/chinaearl/blog/111077?fromerr=MgE0tzjt" target="_blank" rel="external">http://my.oschina.net/chinaearl/blog/111077?fromerr=MgE0tzjt</a></p>
-<p> tar zxvf mongodb-linux-x86_64-2.2.3.tgz</p>
-<p> cd /usr/local/mongodb</p>
-<p> mkdir -p ./data/db/</p>
-<p> mkdir logs</p>
-<p> mongod –dbpath=/usr/local/mongodb/data/db –logpath=/usr/local/mongodb/logs/mongodb.log –fork</p>
-<p> 或者是./mongod</p>
-<p> ./mongod来启动mongodb</p>
-<p> wget  <a href="http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm" target="_blank" rel="external">http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm</a></p>
-<p> rpm -ivh nginx-release-centos-7-0.el7.ngx.noarch.rpm</p>
-<p> yum install nginx</p>
-<p> systemctl start nginx</p>
-<p> 这边是按照默认的配置安装的</p>
-<h2 id="nginx的部分配置："><a href="#nginx的部分配置：" class="headerlink" title="nginx的部分配置："></a>nginx的部分配置：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line">[root@－－－－－－－ ~]<span class="comment"># iptables</span></div><div class="line"></div><div class="line">iptables v1.4.21: no <span class="built_in">command</span> specified</div><div class="line"></div><div class="line">Try <span class="string">'iptables -h'</span> or <span class="string">'iptables --help'</span> <span class="keyword">for</span> more information</div><div class="line"></div><div class="line">[root@－－－－－－－ ~]<span class="comment"># netstat -nap</span></div><div class="line"></div><div class="line">[root@－－－－－－－ ~]<span class="comment"># nginx -s stop</span></div><div class="line"></div><div class="line">[root@－－－－－－－ ~]<span class="comment"># ps -ef | grep nginx</span></div><div class="line"></div><div class="line">root     11859 11818  0 10:39 pts/1    00:00:00 grep --color=auto nginx</div><div class="line"></div><div class="line">[root@－－－－－－－ ~]<span class="comment"># whereis nginx</span></div><div class="line"></div><div class="line">nginx: /usr/sbin/nginx /etc/nginx /usr/share/nginx</div><div class="line"></div><div class="line">[root@－－－－－－－ ~]<span class="comment"># nginx</span></div><div class="line"></div><div class="line">[root@－－－－－－－ ~]<span class="comment"># ps -ef | grep nginx</span></div><div class="line"></div><div class="line">root     11937     1  0 10:48 ?        00:00:00 nginx: master process nginx</div><div class="line"></div><div class="line">nginx    11938 11937  0 10:48 ?        00:00:00 nginx: worker process</div><div class="line"></div><div class="line">root     11940 11818  0 10:48 pts/1    00:00:00 grep --color=auto nginx</div><div class="line"></div><div class="line">[root@－－－－－－－ ~]<span class="comment">#</span></div></pre></td></tr></table></figure>
-<h2 id="配置文件："><a href="#配置文件：" class="headerlink" title="配置文件："></a>配置文件：</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line">server &#123;</div><div class="line">    	listen       80;</div><div class="line">      server_name  localhost;</div><div class="line">    	<span class="comment">#charset koi8-r;</span></div><div class="line">    	<span class="comment">#access_log  /var/log/nginx/log/host.access.log  main;</span></div><div class="line">    	location / &#123;</div><div class="line">       	 	root   /usr/share/nginx/html;</div><div class="line">        	index  index.html index.htm;</div><div class="line">    	&#125;</div><div class="line">    	<span class="comment">#error_page  404     /404.html;</span></div><div class="line">    	<span class="comment"># redirect server error pages to the static page /50x.html</span></div><div class="line">    	<span class="comment">#</span></div><div class="line">    	error_page   500 502 503 504  /50x.html;</div><div class="line">    	location = /50x.html &#123;</div><div class="line">        	root   /usr/share/nginx/html;</div><div class="line">    	&#125;</div><div class="line">    	<span class="comment"># proxy the PHP scripts to Apache listening on 127.0.0.1:80</span></div><div class="line">    	<span class="comment">#</span></div><div class="line">    	<span class="comment">#location ~ \.php$ &#123;</span></div><div class="line">    	<span class="comment">#    proxy_pass   http://127.0.0.1;</span></div><div class="line">    	<span class="comment">#&#125;</span></div><div class="line">    	<span class="comment"># pass the PHP scripts to FastCGI server listening on 127.0.0.1:9000</span></div><div class="line">    	<span class="comment">#</span></div><div class="line">    	<span class="comment">#location ~ \.php$ &#123;</span></div><div class="line">    	<span class="comment">#    root           html;</span></div><div class="line">    	<span class="comment">#    fastcgi_pass   127.0.0.1:9000;</span></div><div class="line">    	<span class="comment">#    fastcgi_index  index.php;</span></div><div class="line">    	<span class="comment">#    fastcgi_param  SCRIPT_FILENAME  /scripts$fastcgi_script_name;</span></div><div class="line">    	<span class="comment">#    include        fastcgi_params;</span></div><div class="line">    	<span class="comment">#&#125;</span></div><div class="line">    	<span class="comment"># deny access to .htaccess files, if Apache's document root</span></div><div class="line">    	<span class="comment"># concurs with nginx's one</span></div><div class="line">    	<span class="comment">#</span></div><div class="line">    	<span class="comment">#location ~ /\.ht &#123;</span></div><div class="line">    	<span class="comment">#    deny  all;</span></div><div class="line">    	<span class="comment">#&#125;</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	server &#123;</div><div class="line">    	listen       80;</div><div class="line">    	server_name  －－－.ichinepsy.com;</div><div class="line">    	<span class="comment">#charset koi8-r;</span></div><div class="line">    	<span class="comment">#access_log  /var/log/nginx/log/host.access.log  main;</span></div><div class="line">    	location / &#123;</div><div class="line">        	root   /usr/share/nginx/html;</div><div class="line">        	index  index.html index.htm;</div><div class="line">			proxy_pass   http://localhost:8951;</div><div class="line">    	&#125;</div><div class="line">    	<span class="comment">#error_page  404              /404.html;</span></div><div class="line">    	<span class="comment"># redirect server error pages to the static page /50x.html</span></div><div class="line">    	<span class="comment">#</span></div><div class="line">    	error_page   500 502 503 504  /50x.html;</div><div class="line">    	location = /50x.html &#123;</div><div class="line">        	root   /usr/share/nginx/html;</div><div class="line">    	&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	server &#123;</div><div class="line">    	listen       80;</div><div class="line">    	server_name  －－－.ichinepsy.com;</div><div class="line">    	<span class="comment">#charset koi8-r;</span></div><div class="line">    	<span class="comment">#access_log  /var/log/nginx/log/host.access.log  main;</span></div><div class="line">    	location / &#123;</div><div class="line">        	root   /usr/share/nginx/html;</div><div class="line">        	index  index.html index.htm;</div><div class="line">			proxy_pass   http://localhost:8952;</div><div class="line">    	&#125;</div><div class="line">    	<span class="comment">#error_page  404              /404.html;</span></div><div class="line">    	<span class="comment"># redirect server error pages to the static page /50x.html</span></div><div class="line">    	<span class="comment">#</span></div><div class="line">    	error_page   500 502 503 504  /50x.html;</div><div class="line">    	location = /50x.html &#123;</div><div class="line">        	root   /usr/share/nginx/html;</div><div class="line">    	&#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
-<h2 id="守护进程："><a href="#守护进程：" class="headerlink" title="守护进程："></a>守护进程：</h2><p>npm install forever -gd</p>
-<p>forever –help</p>
-<p>forever start app.js</p>
-<p>forever stop app.js</p>
-
+        <h4 id="几个注意点："><a href="#几个注意点：" class="headerlink" title="几个注意点："></a>几个注意点：</h4><p><img src="http://springtail.github.io/images/zookeeper/version-check.png" alt="Alt text"></p>
+<p>使用版本来阻止并行操作的不一致性：</p>
+<p>1.客户端c1写入了第一个版本的/config。</p>
+<p>2.客户端c2读取了/config并写入了第二个版本。</p>
+<p>3.客户端c1尝试对/config进行写入，但因版本号不匹配二请求失败。</p>
+<p><img src="http://springtail.github.io/images/zookeeper/zookeeper_framework.png" alt="Alt text"></p>
+<p>zookeeper架构总览</p>
+<p><img src="http://springtail.github.io/images/zookeeper/client_connect.png" alt="Alt text"></p>
+<p>客户端重连 (通过zxid去匹配)</p>
+<p>1.客户端连接s1</p>
+<p>2.客户端执行创建操作。操作成功并获得服务器分配的zxid 1.</p>
+<p>3.客户端与s1断开连接。</p>
+<p>4.客户端尝试连接s2，但是服务器有一个较低的zxid 1.</p>
+<p>5.客户端尝试连接s3并成功。</p>
+<p>znode节点可以是持久节点，还可以是临时节点。持久节点只能通过调用delete来删除。而临时节点不是，当创建该节点的客户端崩溃或者关闭了与zookeeper的连接时，这个节点就会被删除。</p>
+<p>znode一共有4种类型：持久的，临时的，持久有序的，临时有序的。</p>
+<p>一个监视点(watch)表示一个与之相关联的znode节点和事件类型组成的单次触发器。</p>
+<p>客户端设置的每个监视点与会话关联，如果会话过期，等待中的监视点将会被删除。</p>
+<p>监视点有两种类型：数据监视点和子节点监视点。创建，删除或设置一个znode节点数据都会触发数据监视点，exists和getData这两个操作可以设置数据监视点。只有getChildren操作可以设置子节点监视点，这种监视点只有在znode子节点创建或删除时才会触发。</p>
+<p>对于监视点的一个重要问题是，一旦设置了监视点就无法移除。想要移除一个监视点，只有两种方法，一是触发这个监视点，二是使其会话被关闭或者过期。</p>
+<p>ZooKeeper 通过访问列表(ACL)来控制访问权限。</p>
+<p><a href="https://github.com/fpj/zookeeper-book-example" target="_blank" rel="external">https://github.com/fpj/zookeeper-book-example</a></p>
+<h4 id="主从模式流程："><a href="#主从模式流程：" class="headerlink" title="主从模式流程："></a>主从模式流程：</h4><p>master – worker – client 顺序</p>
+<p>1.master执行<br>    /<br>        /workers<br>        /tasks<br>        /assign<br>        /status</p>
+<pre><code>/
+    /workers  //添加过 监视节点  workersChangeWatcher
+    /tasks  //添加过 监视节点 tasksChangeWatcher
+    /assign
+    /status
+    /master //临时节点
+</code></pre><p>2.worker执行</p>
+<pre><code>/
+    /workers
+            /worker-90504b04 //后   触发监视器，然后执行workersGetChildrenCallback
+    /tasks
+    /assign
+            /worker-90504b04 //先   监视该路径下的 NodeChildrenChanged 有变化就是 getTasks();在执行一遍，获取最新数据
+    /status
+    /master
+</code></pre><p>在master.java中，因为有监控器，所以</p>
+<pre><code>2017-02-08 15:32:29,574 - INFO  - [main-EventThread:Master$7@468] - Succesfully got a list of workers: 1 workers
+2017-02-08 15:32:29,574 - INFO  - [main-EventThread:Master@496] - --children.get(0)---worker-90504b04
+2017-02-08 15:32:29,574 - INFO  - [main-EventThread:Master@506] - Removing and setting
+</code></pre><p>3.task创建</p>
+<p>————————— client.java中—————–</p>
+<pre><code>/
+    /workers
+            /worker-90504b04
+    /tasks
+            /task-0000000000  //create  先创建任务,然后查看 /status/task-0000000000(1)
+            /task-0000000001  //create
+    /assign
+            /worker-90504b04
+    /status
+    /master
+</code></pre><p>————————— worker.java中—————–</p>
+<pre><code>/
+    /workers
+            /worker-90504b04
+    /tasks
+            /task-0000000000  //create
+            /task-0000000001  //create
+    /assign
+            /worker-90504b04
+    /status
+    /master
+</code></pre><p>————————— master.java中—————–</p>
+<p>触发master.java中tasks的监视器tasksChangeWatcher,触发getTasks();同时再次添加监视器。</p>
+<p>getTasks();执行</p>
+<pre><code>2017-02-08 16:15:00,458 - INFO  - [main-EventThread:Master$14@760] - Assignment path: /assign/worker-90504b04/task-0000000000
+2017-02-08 16:15:00,458 - INFO  - [main-EventThread:Master$14@760] - Assignment path: /assign/worker-90504b04/task-0000000001
+</code></pre><p>然后执行createAssignment();//分配任务</p>
+<pre><code>/
+    /workers
+            /worker-90504b04
+    /tasks
+            /task-0000000000
+            /task-0000000001
+    /assign
+            /worker-90504b04
+                            /task-0000000000
+                            /task-0000000001
+    /status
+    /master
+</code></pre><p>任务分配结束之后，就删除tasks下的任务 deleteTask(String name);</p>
+<pre><code>/
+    /workers
+            /worker-90504b04
+    /tasks
+    /assign
+            /worker-90504b04
+                            /task-0000000000
+                            /task-0000000001
+    /status
+    /master
+</code></pre><p>————————— worker.java中—————–</p>
+<p>在有任务之后，</p>
+<pre><code>2017-02-08 16:15:00,467 - INFO  - [pool-1-thread-1:Worker$5$1@304] - Looping into tasks
+2017-02-08 16:15:00,471 - INFO  - [pool-1-thread-1:Worker$6$1@349] - Executing your task: Sample task
+2017-02-08 16:15:00,473 - INFO  - [pool-1-thread-1:Worker$6$1@349] - Executing your task: Another sample task
+2017-02-08 16:15:00,473 - INFO  - [main-EventThread:Worker$7@372] - Created status znode correctly: /status/task-0000000000
+2017-02-08 16:15:00,474 - INFO  - [main-EventThread:Worker$8@390] - Task correctly deleted: /assign/worker-90504b04/task-0000000000
+2017-02-08 16:15:00,476 - INFO  - [main-EventThread:Worker$7@372] - Created status znode correctly: /status/task-0000000001
+2017-02-08 16:15:00,476 - INFO  - [main-EventThread:Worker$8@390] - Task correctly deleted: /assign/worker-90504b04/task-0000000001
+</code></pre><p>&amp;</p>
+<pre><code>/
+    /workers
+            /worker-90504b04
+    /tasks
+            /task-0000000000 (异步，不知道此时有没有)
+            /task-0000000001
+    /assign
+            /worker-90504b04
+                            /task-0000000000   这边一直有监控NodeChildrenChanged，然后执行getTasks();循环子节点列表(什么子节点),获取任务信息并执行
+                            /task-0000000001
+    /status
+    /master
+</code></pre><p>然后，在status下添加数据</p>
+<pre><code>/
+    /workers
+            /worker-90504b04
+    /tasks
+    /assign
+            /worker-90504b04
+                            /task-0000000000
+                            /task-0000000001
+    /status
+            /task-0000000000
+            /task-0000000001
+    /master
+</code></pre><p>接着，删除/assign/worker-90504b04/下数据/assign/worker-90504b04/task-0000000000(1)  (worker.java中)</p>
+<pre><code>/
+    /workers
+            /worker-90504b04
+    /tasks
+    /assign
+            /worker-90504b04
+    /status
+            /task-0000000000
+            /task-0000000001
+    /master
+</code></pre><p>————————— client.java中—————–</p>
+<p>status下有数据之后</p>
+<p>获取数据并校验(校验：)</p>
+<pre><code>2017-02-08 16:15:00,479 - INFO  - [main-EventThread:Client$4@201] - Task /status/task-0000000000, done
+2017-02-08 16:15:00,481 - INFO  - [main-EventThread:Client$4@201] - Task /status/task-0000000001, done
+</code></pre><p>然后将节点删掉</p>
+<pre><code>/
+    /workers
+            /worker-90504b04
+    /tasks
+    /assign
+            /worker-90504b04
+    /status
+    /master
+</code></pre>
       
     </div>
 
@@ -387,11 +550,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Linux/" rel="tag"># Linux</a>
-          
-            <a href="/tags/aliyun/" rel="tag"># aliyun</a>
-          
-            <a href="/tags/node/" rel="tag"># node</a>
+            <a href="/tags/zookeeper/" rel="tag"># zookeeper</a>
           
         </div>
       
@@ -400,8 +559,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/03/19/spring的IOC容器的初始化/" rel="next" title="spring的IOC容器的初始化">
-                <i class="fa fa-chevron-left"></i> spring的IOC容器的初始化
+              <a href="/2016/10/15/构建一个hexo博客/" rel="next" title="构建hexo博客笔记">
+                <i class="fa fa-chevron-left"></i> 构建hexo博客笔记
               </a>
             
           </div>
@@ -410,8 +569,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/05/18/backbone部分代码笔记/" rel="prev" title="backbone部分代码笔记">
-                backbone部分代码笔记 <i class="fa fa-chevron-right"></i>
+              <a href="/2016/11/04/缓存部分小结/" rel="prev" title="缓存部分小结">
+                缓存部分小结 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -438,8 +597,8 @@
           
   <div class="comments" id="comments">
     
-      <div class="ds-thread" data-thread-key="2016/05/11/服务器配置/"
-           data-title="服务器配置" data-url="http://yoursite.com/2016/05/11/服务器配置/">
+      <div class="ds-thread" data-thread-key="2016/10/21/zookeeper笔记/"
+           data-title="zookeeper笔记" data-url="http://yoursite.com/2016/10/21/zookeeper笔记/">
       </div>
     
   </div>
@@ -529,7 +688,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#node环境配置"><span class="nav-number">1.</span> <span class="nav-text">node环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx的部分配置："><span class="nav-number">2.</span> <span class="nav-text">nginx的部分配置：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置文件："><span class="nav-number">3.</span> <span class="nav-text">配置文件：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#守护进程："><span class="nav-number">4.</span> <span class="nav-text">守护进程：</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#几个注意点："><span class="nav-number">1.</span> <span class="nav-text">几个注意点：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#主从模式流程："><span class="nav-number">2.</span> <span class="nav-text">主从模式流程：</span></a></li></ol></div>
             
 
           </div>

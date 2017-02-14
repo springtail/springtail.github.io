@@ -92,15 +92,15 @@
 <meta property="og:site_name" content="一场雨">
 <meta property="og:description" content="运行时数据区域程序计数器：1.为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条线程之间计数器互不影响，独立存储，我们称这一类存储区域为“线程私有”内存。
 2.如果线程正在执行的是java方法，这个计数器记录的是正在执行的虚拟机季节吗指令的地址；如果正在执行的是Native方法，这个计数器值则为空。此内存区域是唯一一个在Java虚拟机规范中没有规定任何OutOfMem">
-<meta property="og:image" content="http://springtail.github.io/images/JVM/Class_form.png">
-<meta property="og:image" content="http://springtail.github.io/images/JVM/tomcat_class_load.png">
-<meta property="og:image" content="http://springtail.github.io/images/JVM/memory.png">
-<meta property="og:updated_time" content="2017-02-14T02:22:27.000Z">
+<meta property="og:image" content="http://springtail.github.io/images/jvm/Class_form.png">
+<meta property="og:image" content="http://springtail.github.io/images/jvm/tomcat_class_load.png">
+<meta property="og:image" content="http://springtail.github.io/images/jvm/memory.png">
+<meta property="og:updated_time" content="2017-02-14T02:30:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JVM虚拟机阅读笔记">
 <meta name="twitter:description" content="运行时数据区域程序计数器：1.为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条线程之间计数器互不影响，独立存储，我们称这一类存储区域为“线程私有”内存。
 2.如果线程正在执行的是java方法，这个计数器记录的是正在执行的虚拟机季节吗指令的地址；如果正在执行的是Native方法，这个计数器值则为空。此内存区域是唯一一个在Java虚拟机规范中没有规定任何OutOfMem">
-<meta name="twitter:image" content="http://springtail.github.io/images/JVM/Class_form.png">
+<meta name="twitter:image" content="http://springtail.github.io/images/jvm/Class_form.png">
 
 
 
@@ -343,7 +343,7 @@
 
       
         <h3 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h3><h4 id="程序计数器："><a href="#程序计数器：" class="headerlink" title="程序计数器："></a>程序计数器：</h4><p>1.为了线程切换后能恢复到正确的执行位置，每条线程都需要有一个独立的程序计数器，各条线程之间计数器互不影响，独立存储，我们称这一类存储区域为“线程私有”内存。</p>
-<p>2.如果线程正在执行的是java方法，这个计数器记录的是正在执行的虚拟机季节吗指令的地址；如果正在执行的是Native方法，这个计数器值则为空。此内存区域是唯一一个在Java虚拟机规范中没有规定任何<br>OutOfMemoryError情况的区域。</p>
+<p>2.如果线程正在执行的是java方法，这个计数器记录的是正在执行的虚拟机季节吗指令的地址；如果正在执行的是Native方法，这个计数器值则为空。此内存区域是唯一一个在Java虚拟机规范中没有规定任何OutOfMemoryError情况的区域。</p>
 <h4 id="虚拟机栈："><a href="#虚拟机栈：" class="headerlink" title="虚拟机栈："></a>虚拟机栈：</h4><p>经常有人把Java内存区分为堆内存和栈内存。栈内存就是虚拟机栈，或者说是虚拟机栈中局部变量部分。</p>
 <p>局部变量表所需的内存空间在编译期间完成分配，当进入一个方法时，这个方法需要在帧中分配多大的局部变量空间是完全确定的，在方法运行期间不会改变局部变量表的大小。</p>
 <h4 id="本地方法栈："><a href="#本地方法栈：" class="headerlink" title="本地方法栈："></a>本地方法栈：</h4><p>本地方法栈和虚拟机栈所发挥的作用是类似的，它们之间的区别不过是虚拟机栈为虚拟机执行Java方法服务，而本地方法栈则为虚拟机使用的Native方法服务。</p>
@@ -352,7 +352,7 @@
 <h4 id="运行时常量池："><a href="#运行时常量池：" class="headerlink" title="运行时常量池："></a>运行时常量池：</h4><p>运行时常量池是方法区的一部分。Class文件中除了有类的版本，字段，方法，接口等描述信息外，还有一项信息是常量池，用于存放编译期生成的各种字面量和符号引用。</p>
 <p>垃圾收集器：Serial收集器，ParNew收集器等。</p>
 <h3 id="类文件结构"><a href="#类文件结构" class="headerlink" title="类文件结构"></a>类文件结构</h3><p>整个Class文件本质上就是一张表</p>
-<p><img src="http://springtail.github.io/images/JVM/Class_form.png" alt="Alt text"></p>
+<p><img src="http://springtail.github.io/images/jvm/Class_form.png" alt="Alt text"></p>
 <h3 id="虚拟机类加载机制"><a href="#虚拟机类加载机制" class="headerlink" title="虚拟机类加载机制"></a>虚拟机类加载机制</h3><p>在java语言里面，类型的加载，连接和初始化过程都是在程序运行期间完成的。</p>
 <p>类从被加载到虚拟机内存中开始，到卸载出内存为止，它的整个生命周期包括：加载，验证，准备，解析，初始化，使用和卸载7个阶段。其中验证，准备，解析3个部分统称为连接，这7个阶段的发生顺序</p>
 <p>加载 - 验证 - 准备 - 解析 - 初始化 - 使用 - 卸载</p>
@@ -365,14 +365,13 @@
 <h4 id="初始化："><a href="#初始化：" class="headerlink" title="初始化："></a>初始化：</h4><p>到了初始化阶段，才真正开始执行类中定义的Java程序代码(或者说字节码)。</p>
 <h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><p>虚拟机设计团队把类加载阶段中的“通过一个类的全限定名来获取描述此类的二进制字节流”这个动作放到java虚拟机外部去实现，以便让应用程序自己决定如何获取所需要的类，实现这个动作的代码模块成为“类加载器”。</p>
 <p>tomcat的类加载架构：<br>放置在 /common 目录中：类库可被 Tomcat 和所有的Web应用程序共同使用。<br>放置在 /server 目录中：类库可被 Tomcat使用，对所有的web应用程序不可见。<br>放置在 /shared 目录中：类库可被所有的web应用程序共同使用，但是对Tomcat自己不可见。<br>放置在 /webApp/WEB-INF 目录中：类库仅仅可以被此web应用程序使用，对Tomcat和其他的Web应用程序不可见。</p>
-<p><img src="http://springtail.github.io/images/JVM/tomcat_class_load.png" alt="Alt text"></p>
+<p><img src="http://springtail.github.io/images/jvm/tomcat_class_load.png" alt="Alt text"></p>
 <p>OSGI:（open service gateway initiative）<br>在OSGI里面，是平级模块之间的依赖。一个模块里只有被Export过的Package才可能由外界访问，其他的Package 和Class将会隐藏起来。<br>基于OSGI的程序很可能可以实现模块级的热插拔功能，当程序升级更新或调试出错时，可以只停用，重新安装然后启用程序的其中一部分，这对企业级程序开发来说是一个非常有<br>诱惑力的特性。</p>
 <h3 id="主内存和工作内存"><a href="#主内存和工作内存" class="headerlink" title="主内存和工作内存"></a>主内存和工作内存</h3><p>Java内存模型的主要目标是定义程序中各个变量的访问规则，即在虚拟机中将变量存储到内存和从内存中取出变量这样的底层细节。此处的变量与Java编程中所说的变量有区别，它包括了实例字段，静态字段和构成数组对象的元素，但是不包括局部变量与方法参数，因为后者是线程私有的，不会被共享，自然就不会存在竞争的问题。</p>
 <p>Java内存模型规定了所有的变量都存储在主内存中，但此处仅是虚拟机内存的一部分。</p>
-<p><img src="http://springtail.github.io/images/JVM/memory.png" alt="Alt text"></p>
+<p><img src="http://springtail.github.io/images/jvm/memory.png" alt="Alt text"></p>
 <p>内存间交互操作：</p>
 <p>lock(锁定): 作用于主内存变量<br>unlock(解锁): 作用于主内存变量<br>read(读取): 作用于主内存变量，从主内存传输到线程的工作内存中<br>load(载入): 作用于工作区内存变量，将从主内存中获得的变量值存入到工作内存中<br>use(使用): 作用于工作区内存变量，把工作内存中的变量的值传递给执行引擎<br>assign(赋值): 作用于工作区内存变量，执行引擎得到的值赋值到工作内存的变量<br>store(存储): 作用于工作区内存变量，将工作内存中的变量的值传递到主内存中<br>write(写入): 作用于主内存变量，将从工作内存中传过来的变量存放到主内存变量中</p>
-<p>1</p>
 
       
     </div>

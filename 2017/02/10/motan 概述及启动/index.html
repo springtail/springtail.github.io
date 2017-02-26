@@ -1,0 +1,893 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="motan," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="https://springtail.github.io/favicon.ico" />
+
+
+
+
+
+
+<meta name="description" content="概述官方文档：https://github.com/weibocom/motan/wiki/zh_userguide
+register 模块用来和注册中心进行交互，包括注册服务、订阅服务、服务变更通知、服务心跳发送等功能；Server 端会在系统初始化时通过 register 模块注册服务，Client 端在系统初始化时会通过 register 模块订阅到具体提供服务的 Server 列表，当 S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="motan 概述及启动">
+<meta property="og:url" content="http://yoursite.com/2017/02/10/motan 概述及启动/index.html">
+<meta property="og:site_name" content="一场雨">
+<meta property="og:description" content="概述官方文档：https://github.com/weibocom/motan/wiki/zh_userguide
+register 模块用来和注册中心进行交互，包括注册服务、订阅服务、服务变更通知、服务心跳发送等功能；Server 端会在系统初始化时通过 register 模块注册服务，Client 端在系统初始化时会通过 register 模块订阅到具体提供服务的 Server 列表，当 S">
+<meta property="og:image" content="http://springtail.github.io/images/rpc/load_balance.png">
+<meta property="og:image" content="http://springtail.github.io/images/rpc/loadBalance_imp.png">
+<meta property="og:image" content="http://springtail.github.io/images/rpc/innerCreateServer.png">
+<meta property="og:image" content="http://springtail.github.io/images/rpc/startDebugOne.png">
+<meta property="og:image" content="http://springtail.github.io/images/rpc/startDebugTwo.png">
+<meta property="og:updated_time" content="2017-02-26T06:51:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="motan 概述及启动">
+<meta name="twitter:description" content="概述官方文档：https://github.com/weibocom/motan/wiki/zh_userguide
+register 模块用来和注册中心进行交互，包括注册服务、订阅服务、服务变更通知、服务心跳发送等功能；Server 端会在系统初始化时通过 register 模块注册服务，Client 端在系统初始化时会通过 register 模块订阅到具体提供服务的 Server 列表，当 S">
+<meta name="twitter:image" content="http://springtail.github.io/images/rpc/load_balance.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+
+
+
+
+  <title> motan 概述及启动 | 一场雨 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">一场雨</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">let it be beautiful</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/02/10/motan 概述及启动/">
+
+  <span style="display:none" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="chenmanman">
+    <meta itemprop="description" content="">
+    <meta itemprop="image" content="/images/head_image.jpg">
+  </span>
+
+  <span style="display:none" itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="一场雨">
+    <span style="display:none" itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+      <img style="display:none;" itemprop="url image" alt="一场雨" src="">
+    </span>
+  </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                motan 概述及启动
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-10T00:00:00+08:00">
+                2017-02-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <a href="/2017/02/10/motan 概述及启动/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/10/motan 概述及启动/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2017/02/10/motan 概述及启动/" class="leancloud_visitors" data-flag-title="motan 概述及启动">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>官方文档：<a href="https://github.com/weibocom/motan/wiki/zh_userguide" target="_blank" rel="external">https://github.com/weibocom/motan/wiki/zh_userguide</a></p>
+<h4 id="register-模块"><a href="#register-模块" class="headerlink" title="register 模块"></a>register 模块</h4><p>用来和注册中心进行交互，包括注册服务、订阅服务、服务变更通知、服务心跳发送等功能；Server 端会在系统初始化时通过 register 模块注册服务，Client 端在系统初始化时会通过 register 模块订阅到具体提供服务的 Server 列表，当 Server 列表发生变更时也由 register 模块通知 Client。</p>
+<h4 id="protocol-模块"><a href="#protocol-模块" class="headerlink" title="protocol 模块"></a>protocol 模块</h4><p>用来进行 RPC 服务的描述和 RPC 服务的配置管理，这一层还可以添加不同功能的 filter用来完成统计、并发限制等功能。</p>
+<h4 id="serialize-模块"><a href="#serialize-模块" class="headerlink" title="serialize 模块"></a>serialize 模块</h4><p>将 RPC 请求中的参数、结果等对象进行序列化与反序列化，即进行对象与字节流的互相转换；默认使用对 Java 更友好的 hessian2 进行序列化。</p>
+<h4 id="transport-模块"><a href="#transport-模块" class="headerlink" title="transport 模块"></a>transport 模块</h4><p>用来进行远程通信，默认使用 Netty NIO 的 TCP 长链接方式。</p>
+<h4 id="cluster-模块"><a href="#cluster-模块" class="headerlink" title="cluster 模块"></a>cluster 模块</h4><p>Client 端使用的模块，cluster 是一组可用的 Server 在逻辑上的封装，包含若干可以提供 RPC 服务的 Server，实际请求时会根据不同的高可用与负载均衡策略选择一个可用的 Server 发起远程调用。</p>
+<p>在进行 RPC 请求时，Client 通过代理机制调用 cluster 模块，cluster 根据配置的 HA 和 LoadBalance 选出一个可用的 Server，通过serialize模块把RPC请求转换为字节流，然后通过 transport 模块发送到 Server 端。</p>
+<h4 id="配置元素"><a href="#配置元素" class="headerlink" title="配置元素"></a>配置元素</h4><p>Motan 框架中将功能模块抽象为四个可配置的元素，分别为：</p>
+<pre><code>protocol：服务通信协议。服务提供方与消费方进行远程调用的协议，默认为 Motan 协议，使用 hessian2 进行序列化，Netty 作为 Endpoint 以及使用Motan 自定义的协议编码方式。
+
+registry：注册中心。服务提供方将服务信息(包含IP、端口、服务策略等信息)注册到注册中心，服务消费方通过注册中心发现服务。当服务发生变更，注册中心负责通知各个消费方。
+
+service：服务提供方提供的服务。使用方将核心业务抽取出来，作为独立的服务。通过暴露服务并将服务注册至注册中心，从而使调用方调用。
+
+referer：服务消费方对服务的引用，即服务调用方。
+</code></pre><p>Motan 推荐使用 Spring 配置 RPC 服务，目前 Motan 扩展了 6 个自定义 Spring XML 标签</p>
+<pre><code>motan:protocol
+motan:registry
+motan:basicService
+motan:service
+motan:basicReferer
+motan:referer
+</code></pre><p>高可用方面是 Motan 的一大特点，支持多种服务治理和高可用机制，包括：灵活多样的集群负载均衡策略，支持 ActiveWeight/Random/RoundRobin/LocalFirst/Consistent等6种策略，并支持自定义扩展；</p>
+<p>自动集成Failover、Failfast容错策略，实现故障节点自动摘除，自动探测恢复，有效进行服务故障隔离，远离服务卡死及雪崩；</p>
+<p>连接池自定义控制，根据业务场景灵活配置；支持多机房间调用流量压缩、动态流量调整，实现真正的跨 IDC 的高可用。基于高并发、高负载场景的优化，具备在高压力场景下的高可用能力。</p>
+<h3 id="郑大侠的笔记-motan"><a href="#郑大侠的笔记-motan" class="headerlink" title="郑大侠的笔记 motan"></a>郑大侠的笔记 motan</h3><p><a href="http://code.zhizus.com/categories/Motan%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" target="_blank" rel="external">http://code.zhizus.com/categories/Motan%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/</a></p>
+<h4 id="Motan源码解读-SPI机制"><a href="#Motan源码解读-SPI机制" class="headerlink" title="Motan源码解读-SPI机制"></a>Motan源码解读-SPI机制</h4><p>SPI 全称为 (Service Provider Interface) ,是JDK内置的一种服务提供发现机制。</p>
+<p>java的spi就是提供这样的一个机制：为某个接口寻找服务实现的机制。有点类似IOC的思想，就是将装配的控制权移到程序之外，在模块化设计中这个机制尤其重要。</p>
+<h4 id="Motan源码解读-Client异步消息"><a href="#Motan源码解读-Client异步消息" class="headerlink" title="Motan源码解读-Client异步消息"></a>Motan源码解读-Client异步消息</h4><p>接下来我们总结一下motan中callbackMap的逻辑：</p>
+<p>client发送request前，先将request注册到(register)到callbackMap中，如果发送前连接异常，则直接remove掉。客户端收到response后，根据requestId找到对应的request上下文，并移除callbackMap中的对应的对象。对于服务端超时或者其他异常，客户端收不到消息的情况，则通过TimeoutMonitor来定时扫描callbackMap来清理。</p>
+<h4 id="Motan源码解读-负载均衡"><a href="#Motan源码解读-负载均衡" class="headerlink" title="Motan源码解读-负载均衡"></a>Motan源码解读-负载均衡</h4><p>RPCClient首先会经过一层HA（这里motan实现了两种容灾策略，failfast&amp;failover），然后会根据配置的loadbalance的策略选取相应的nettyClient发送请求到RPCServer。</p>
+<p><img src="http://springtail.github.io/images/rpc/load_balance.png" alt="Alt text"></p>
+<p><img src="http://springtail.github.io/images/rpc/loadBalance_imp.png" alt="Alt text"></p>
+<pre><code>// 可以基于SPI扩展，使用方可以实现自己的LoadBalance
+    @Spi(scope = Scope.PROTOTYPE)
+    public interface LoadBalance&lt;T&gt; {
+
+        //当可用的应用列表变化时会调用这个方法刷新（motan的可用引用列表是基于服务发现这种模式实现，目前实现了consul&amp;zk）
+        void onRefresh(List&lt;Referer&lt;T&gt;&gt; referers);
+
+        // 基于负载均衡的策略选择可用的引用
+        Referer&lt;T&gt; select(Request request);
+
+        // FailoverHaStrategy会使用到这个，多线程场景
+        void selectToHolder(Request request, List&lt;Referer&lt;T&gt;&gt; refersHolder);
+
+        // ?? 仅仅属于WeightLoadBalance的特性，定义在最上层接口是否合适？？
+        //cluster.getLoadBalance().setWeightString(weights); 这里使用的时候判断一下类型，对WeightLoadBalance这种类型单独处理向下转型是否可以？
+        // 或者是否有其他更好的办法？？
+        void setWeightString(String weightString);
+
+    }
+</code></pre><h4 id="Motan源码解读-容错策略"><a href="#Motan源码解读-容错策略" class="headerlink" title="Motan源码解读-容错策略"></a>Motan源码解读-容错策略</h4><h4 id="Motan源码解读-Protocol"><a href="#Motan源码解读-Protocol" class="headerlink" title="Motan源码解读-Protocol"></a>Motan源码解读-Protocol</h4><pre><code>provider：
+        服务提供方，通常可以认为是server端
+
+export：
+        服务提供Provider暴露出去就变成Exporter，服务使用方（客户端）可以调用暴露出去的Provider。
+
+        根据URL将exporter从map中取出来，然后，将provider放到exporter中去，然后，再将 exporter放到map中去。
+
+refer：
+        引用服务，引用的服务会通过配置去调用服务端暴露的服务
+</code></pre><h4 id="Motan源码解读-源码结构"><a href="#Motan源码解读-源码结构" class="headerlink" title="Motan源码解读-源码结构"></a>Motan源码解读-源码结构</h4><pre><code>motan-benchmark // 压测相关
+motan-core    //motan核心代码，也是源码解析的主要包
+motan-demo    // 示例，快速上手的最佳方法
+motan-extension // 扩展
+motan-manager // 管理后台
+motan-registry-consul    //基于consul的服务发现实现
+motan-registry-zookeeper // 基于zookeeper的服务发现实现
+motan-springsupport // spring容器的支持，也支持springboot
+motan-transport-netty // netty传输的封装
+</code></pre><h4 id="Motan源码解读-Filter"><a href="#Motan源码解读-Filter" class="headerlink" title="Motan源码解读-Filter"></a>Motan源码解读-Filter</h4><pre><code>很多服务都有filter这个概念，filter就像在管道前的过滤器，只要通过管道的请求必须先经过过滤器。过滤器可以做很多事情，类似权限控制，限流，统计，上报，监控等等。有些为服务架构会把filter单独抽出来作为getway服务
+</code></pre><h4 id="Motan源码解读-codec"><a href="#Motan源码解读-codec" class="headerlink" title="Motan源码解读-codec"></a>Motan源码解读-codec</h4><pre><code>motan的codec负责rpc框架通讯协议的编解码。
+</code></pre><h3 id="manager-模块的启动"><a href="#manager-模块的启动" class="headerlink" title="manager 模块的启动"></a>manager 模块的启动</h3><p>1.在顶层install 然后，在 manager项目中打包 war包 ，使用 package 命令 。</p>
+<p>2.用tomcat启动项目。</p>
+<h3 id="motan-的启动"><a href="#motan-的启动" class="headerlink" title="motan 的启动"></a>motan 的启动</h3><p><img src="http://springtail.github.io/images/rpc/innerCreateServer.png" alt="Alt text"></p>
+<p><img src="http://springtail.github.io/images/rpc/startDebugOne.png" alt="Alt text"></p>
+<p><img src="http://springtail.github.io/images/rpc/startDebugTwo.png" alt="Alt text"></p>
+<p>motan_demo_server.xml中： xmlns:motan=”<a href="http://api.weibo.com/schema/motan" target="_blank" rel="external">http://api.weibo.com/schema/motan</a>“</p>
+<p>spring.handlers中：http\://api.weibo.com/schema/motan=com.weibo.api.motan.config.springsupport.MotanNamespaceHandler</p>
+<h4 id="1-获取命名空间uri"><a href="#1-获取命名空间uri" class="headerlink" title="1.获取命名空间uri :"></a>1.获取命名空间uri :</h4><p>com.weibo.api.motan.config.springsupport.MotanNamespaceHandler</p>
+<pre><code>public class MotanNamespaceHandler extends NamespaceHandlerSupport {
+
+    public final static Set&lt;String&gt; protocolDefineNames = new ConcurrentHashSet&lt;String&gt;();
+    public final static Set&lt;String&gt; registryDefineNames = new ConcurrentHashSet&lt;String&gt;();
+    public final static Set&lt;String&gt; basicServiceConfigDefineNames = new ConcurrentHashSet&lt;String&gt;();
+    public final static Set&lt;String&gt; basicRefererConfigDefineNames = new ConcurrentHashSet&lt;String&gt;();
+
+    @Override
+    public void init() {
+
+        registerBeanDefinitionParser(&quot;referer&quot;, new MotanBeanDefinitionParser(RefererConfigBean.class, false));
+        registerBeanDefinitionParser(&quot;service&quot;, new MotanBeanDefinitionParser(ServiceConfigBean.class, true));
+        registerBeanDefinitionParser(&quot;protocol&quot;, new MotanBeanDefinitionParser(ProtocolConfig.class, true));
+        registerBeanDefinitionParser(&quot;registry&quot;, new MotanBeanDefinitionParser(RegistryConfig.class, true));
+        registerBeanDefinitionParser(&quot;basicService&quot;, new MotanBeanDefinitionParser(BasicServiceInterfaceConfig.class, true));
+        registerBeanDefinitionParser(&quot;basicReferer&quot;, new MotanBeanDefinitionParser(BasicRefererInterfaceConfig.class, true));
+        registerBeanDefinitionParser(&quot;spi&quot;, new MotanBeanDefinitionParser(SpiConfigBean.class, true));
+        registerBeanDefinitionParser(&quot;annotation&quot;, new MotanBeanDefinitionParser(AnnotationBean.class, true));
+        Initializable initialization = InitializationFactory.getInitialization();
+
+        initialization.init();
+
+    }
+}
+</code></pre><h4 id="2-通过反射机制实例化，调用init-方法。"><a href="#2-通过反射机制实例化，调用init-方法。" class="headerlink" title="2.通过反射机制实例化，调用init();方法。"></a>2.通过反射机制实例化，调用init();方法。</h4><p>方法中注册了Motan自定DOM节点的解析器</p>
+<p>MotanNamespaceHandler继承了NamespaceHandlerSupport。所以不用实现所有的解析工作，只需将自定义schema中的元素解析器注册进来就可以。(schema拓展的解析器)</p>
+<pre><code>MotanBeanDefinitionParser(Class&lt;?&gt; beanClass, boolean required);//元素解析器
+
+public class MotanBeanDefinitionParser implements BeanDefinitionParser{
+
+
+}
+</code></pre><h4 id="3-将实例存入handlerMappings用于后续的解析"><a href="#3-将实例存入handlerMappings用于后续的解析" class="headerlink" title="3.将实例存入handlerMappings用于后续的解析"></a>3.将实例存入handlerMappings用于后续的解析</h4><h4 id="4-找到对应DOM节点的解析器，开始解析，"><a href="#4-找到对应DOM节点的解析器，开始解析，" class="headerlink" title="4.找到对应DOM节点的解析器，开始解析，"></a>4.找到对应DOM节点的解析器，开始解析，</h4><p>根据MotanNamespaceHandler中注册的信息,spring找到解析类并调用解析方法：MotanBeanDefinitionParser.Parse()。</p>
+<p>第一步，初始化RootBeanDefinition</p>
+<p>第二步，获取beanid</p>
+<p>第三步，将xml中配置的信息放到beandefinition的PropertyValues中。    </p>
+<pre><code>bd.getPropertyValues().addPropertyValue(&quot;id&quot;, id);
+</code></pre><p>最后将BeanDefinition返回出来。配置成bean的类会定义成BeanDefinition，注册到spring。</p>
+<h4 id="5-registerBeanPostProcessors"><a href="#5-registerBeanPostProcessors" class="headerlink" title="5.registerBeanPostProcessors();"></a>5.registerBeanPostProcessors();</h4><p>1</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/motan/" rel="tag"># motan</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/04/缓存部分小结/" rel="next" title="缓存部分小结">
+                <i class="fa fa-chevron-left"></i> 缓存部分小结
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/14/netty笔记/" rel="prev" title="netty笔记">
+                netty笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/02/10/motan 概述及启动/"
+           data-title="motan 概述及启动" data-url="http://yoursite.com/2017/02/10/motan 概述及启动/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/head_image.jpg"
+               alt="chenmanman" />
+          <p class="site-author-name" itemprop="name">chenmanman</p>
+          <p class="site-description motion-element" itemprop="description">等一场雨</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#register-模块"><span class="nav-number">1.1.</span> <span class="nav-text">register 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#protocol-模块"><span class="nav-number">1.2.</span> <span class="nav-text">protocol 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serialize-模块"><span class="nav-number">1.3.</span> <span class="nav-text">serialize 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#transport-模块"><span class="nav-number">1.4.</span> <span class="nav-text">transport 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cluster-模块"><span class="nav-number">1.5.</span> <span class="nav-text">cluster 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置元素"><span class="nav-number">1.6.</span> <span class="nav-text">配置元素</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#郑大侠的笔记-motan"><span class="nav-number">2.</span> <span class="nav-text">郑大侠的笔记 motan</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-SPI机制"><span class="nav-number">2.1.</span> <span class="nav-text">Motan源码解读-SPI机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-Client异步消息"><span class="nav-number">2.2.</span> <span class="nav-text">Motan源码解读-Client异步消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-负载均衡"><span class="nav-number">2.3.</span> <span class="nav-text">Motan源码解读-负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-容错策略"><span class="nav-number">2.4.</span> <span class="nav-text">Motan源码解读-容错策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-Protocol"><span class="nav-number">2.5.</span> <span class="nav-text">Motan源码解读-Protocol</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-源码结构"><span class="nav-number">2.6.</span> <span class="nav-text">Motan源码解读-源码结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-Filter"><span class="nav-number">2.7.</span> <span class="nav-text">Motan源码解读-Filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-codec"><span class="nav-number">2.8.</span> <span class="nav-text">Motan源码解读-codec</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#manager-模块的启动"><span class="nav-number">3.</span> <span class="nav-text">manager 模块的启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#motan-的启动"><span class="nav-number">4.</span> <span class="nav-text">motan 的启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-获取命名空间uri"><span class="nav-number">4.1.</span> <span class="nav-text">1.获取命名空间uri :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-通过反射机制实例化，调用init-方法。"><span class="nav-number">4.2.</span> <span class="nav-text">2.通过反射机制实例化，调用init();方法。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-将实例存入handlerMappings用于后续的解析"><span class="nav-number">4.3.</span> <span class="nav-text">3.将实例存入handlerMappings用于后续的解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-找到对应DOM节点的解析器，开始解析，"><span class="nav-number">4.4.</span> <span class="nav-text">4.找到对应DOM节点的解析器，开始解析，</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-registerBeanPostProcessors"><span class="nav-number">4.5.</span> <span class="nav-text">5.registerBeanPostProcessors();</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">chenmanman</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"chenmanman"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.1.js"></script>
+  <script>AV.initialize("ytqhqfWc5FgkujcTaFJy74qd-gzGzoHsz", "NuN029AE0uD0ORqva9tzYwXU");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+
+</body>
+</html>

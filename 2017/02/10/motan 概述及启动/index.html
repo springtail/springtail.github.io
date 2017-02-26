@@ -97,7 +97,7 @@ register 模块用来和注册中心进行交互，包括注册服务、订阅�
 <meta property="og:image" content="http://springtail.github.io/images/rpc/innerCreateServer.png">
 <meta property="og:image" content="http://springtail.github.io/images/rpc/startDebugOne.png">
 <meta property="og:image" content="http://springtail.github.io/images/rpc/startDebugTwo.png">
-<meta property="og:updated_time" content="2017-02-26T06:51:01.000Z">
+<meta property="og:updated_time" content="2017-02-26T06:55:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="motan 概述及启动">
 <meta name="twitter:description" content="概述官方文档：https://github.com/weibocom/motan/wiki/zh_userguide
@@ -423,7 +423,8 @@ motan-transport-netty // netty传输的封装
 <p><img src="http://springtail.github.io/images/rpc/startDebugOne.png" alt="Alt text"></p>
 <p><img src="http://springtail.github.io/images/rpc/startDebugTwo.png" alt="Alt text"></p>
 <p>motan_demo_server.xml中： xmlns:motan=”<a href="http://api.weibo.com/schema/motan" target="_blank" rel="external">http://api.weibo.com/schema/motan</a>“</p>
-<p>spring.handlers中：http\://api.weibo.com/schema/motan=com.weibo.api.motan.config.springsupport.MotanNamespaceHandler</p>
+<p>spring.handlers中：</p>
+<p>http\://api.weibo.com/schema/motan=com.weibo.api.motan.config.springsupport.MotanNamespaceHandler</p>
 <h4 id="1-获取命名空间uri"><a href="#1-获取命名空间uri" class="headerlink" title="1.获取命名空间uri :"></a>1.获取命名空间uri :</h4><p>com.weibo.api.motan.config.springsupport.MotanNamespaceHandler</p>
 <pre><code>public class MotanNamespaceHandler extends NamespaceHandlerSupport {
 
@@ -463,8 +464,7 @@ public class MotanBeanDefinitionParser implements BeanDefinitionParser{
 <p>第三步，将xml中配置的信息放到beandefinition的PropertyValues中。    </p>
 <pre><code>bd.getPropertyValues().addPropertyValue(&quot;id&quot;, id);
 </code></pre><p>最后将BeanDefinition返回出来。配置成bean的类会定义成BeanDefinition，注册到spring。</p>
-<h4 id="5-registerBeanPostProcessors"><a href="#5-registerBeanPostProcessors" class="headerlink" title="5.registerBeanPostProcessors();"></a>5.registerBeanPostProcessors();</h4><p>1</p>
-
+<h4 id="5-registerBeanPostProcessors"><a href="#5-registerBeanPostProcessors" class="headerlink" title="5.registerBeanPostProcessors();"></a>5.registerBeanPostProcessors();</h4>
       
     </div>
 

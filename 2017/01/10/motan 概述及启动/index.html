@@ -97,7 +97,7 @@ register 模块用来和注册中心进行交互，包括注册服务、订阅�
 <meta property="og:image" content="http://springtail.github.io/images/rpc/innerCreateServer.png">
 <meta property="og:image" content="http://springtail.github.io/images/rpc/startDebugOne.png">
 <meta property="og:image" content="http://springtail.github.io/images/rpc/startDebugTwo.png">
-<meta property="og:updated_time" content="2017-02-26T07:04:26.000Z">
+<meta property="og:updated_time" content="2017-02-26T07:16:28.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="motan 概述及启动">
 <meta name="twitter:description" content="概述官方文档：https://github.com/weibocom/motan/wiki/zh_userguide
@@ -464,7 +464,45 @@ public class MotanBeanDefinitionParser implements BeanDefinitionParser{
 <p>第三步，将xml中配置的信息放到beandefinition的PropertyValues中。    </p>
 <pre><code>bd.getPropertyValues().addPropertyValue(&quot;id&quot;, id);
 </code></pre><p>最后将BeanDefinition返回出来。配置成bean的类会定义成BeanDefinition，注册到spring。</p>
-<h4 id="5-registerBeanPostProcessors"><a href="#5-registerBeanPostProcessors" class="headerlink" title="5.registerBeanPostProcessors();"></a>5.registerBeanPostProcessors();</h4>
+<h4 id="5-registerBeanPostProcessors"><a href="#5-registerBeanPostProcessors" class="headerlink" title="5.registerBeanPostProcessors();"></a>5.registerBeanPostProcessors();</h4><h3 id="控制台输出结果"><a href="#控制台输出结果" class="headerlink" title="控制台输出结果"></a>控制台输出结果</h3><pre><code>MotanNamespaceHandler 中的init()方法 start
+AllSpiInitialization init.
+AllSpiInitialization init finish.
+MotanNamespaceHandler 中的init()方法 end
+ServiceConfigBean 中 afterPropertiesSet() 方法 start
+ServiceConfigBean 中 checkAndConfigBasicConfig 方法 basicServiceConfigDefineNames 集合中的size :1
+ServiceConfigBean 中 checkAndConfigBasicConfig 方法 basicServiceConfigDefineNames 集合中的name :serviceBasicConfig
+ServiceConfigBean 中 checkAndConfigBasicConfig 方法
+ServiceConfigBean 中 checkAndConfigExport 方法 String p ： demoMotan
+ServiceConfigBean 中 afterPropertiesSet() 方法 end
+ServiceConfigBean 中 afterPropertiesSet() 方法 start
+ServiceConfigBean 中 checkAndConfigBasicConfig 方法 basicServiceConfigDefineNames 集合中的size :1
+ServiceConfigBean 中 checkAndConfigBasicConfig 方法 basicServiceConfigDefineNames 集合中的name :serviceBasicConfig
+ServiceConfigBean 中 checkAndConfigBasicConfig 方法
+ServiceConfigBean 中 checkAndConfigExport 方法 String p ： demoMotan
+ServiceConfigBean 中 afterPropertiesSet() 方法 end
+ServiceConfigBean 中onApplicationEvent方法：export(); start
+AbstractInterfaceConfig 中checkInterfaceAndMethods()方法
+AbstractInterfaceConfig 中 loadRegistryUrls() registries的size():1*****以及name:registry
+ServiceConfig 中的 export()：doExport(protocolConfig, port, registryUrls);  strat
+SimpleConfigHandler 中 export方法： Exporter&lt;T&gt; exporter = protocol.export(provider, serviceUrl); start
+exporter = createExporter(provider, url); 开始
+NettyEndpointFactory create share_channel server: url={}motan://10.1.195.135:8001/com.weibo.motan.demo.service.MotanDemoService?group=motan-demo-rpc
+AbstractServer 的构造方法
+createServer end  
+exporter = createExporter(provider, url); 结束
+exporter.init(); 开始
+AbstractNode init()
+ DefaultRpcProtocol中 DefaultRpcExporter  doInit()
+public synchronized boolean open()中NettyServer ServerChannel start Open: url=motan://10.1.195.135:8001/?group=motan-demo-rpc
+result:true
+exporter.init(); 结束
+SimpleConfigHandler 中 export方法： Exporter&lt;T&gt; exporter = protocol.export(provider, serviceUrl); end
+doExport结束
+ServiceConfig 中的 export()：doExport(protocolConfig, port, registryUrls);  end
+ServiceConfigBean 中onApplicationEvent方法：export(); end
+...(另一个service)
+server start...
+</code></pre>
       
     </div>
 
@@ -506,8 +544,8 @@ public class MotanBeanDefinitionParser implements BeanDefinitionParser{
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/02/14/JVM虚拟机/" rel="prev" title="JVM虚拟机阅读笔记">
-                JVM虚拟机阅读笔记 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/01/11/motan 服务注册和暴露/" rel="prev" title="motan 概述及启动">
+                motan 概述及启动 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -580,7 +618,7 @@ public class MotanBeanDefinitionParser implements BeanDefinitionParser{
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">21</span>
+              <span class="site-state-item-count">22</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -625,7 +663,7 @@ public class MotanBeanDefinitionParser implements BeanDefinitionParser{
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#register-模块"><span class="nav-number">1.1.</span> <span class="nav-text">register 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#protocol-模块"><span class="nav-number">1.2.</span> <span class="nav-text">protocol 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serialize-模块"><span class="nav-number">1.3.</span> <span class="nav-text">serialize 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#transport-模块"><span class="nav-number">1.4.</span> <span class="nav-text">transport 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cluster-模块"><span class="nav-number">1.5.</span> <span class="nav-text">cluster 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置元素"><span class="nav-number">1.6.</span> <span class="nav-text">配置元素</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#郑大侠的笔记-motan"><span class="nav-number">2.</span> <span class="nav-text">郑大侠的笔记 motan</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-SPI机制"><span class="nav-number">2.1.</span> <span class="nav-text">Motan源码解读-SPI机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-Client异步消息"><span class="nav-number">2.2.</span> <span class="nav-text">Motan源码解读-Client异步消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-负载均衡"><span class="nav-number">2.3.</span> <span class="nav-text">Motan源码解读-负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-容错策略"><span class="nav-number">2.4.</span> <span class="nav-text">Motan源码解读-容错策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-Protocol"><span class="nav-number">2.5.</span> <span class="nav-text">Motan源码解读-Protocol</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-源码结构"><span class="nav-number">2.6.</span> <span class="nav-text">Motan源码解读-源码结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-Filter"><span class="nav-number">2.7.</span> <span class="nav-text">Motan源码解读-Filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-codec"><span class="nav-number">2.8.</span> <span class="nav-text">Motan源码解读-codec</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#manager-模块的启动"><span class="nav-number">3.</span> <span class="nav-text">manager 模块的启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#motan-的启动"><span class="nav-number">4.</span> <span class="nav-text">motan 的启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-获取命名空间uri"><span class="nav-number">4.1.</span> <span class="nav-text">1.获取命名空间uri :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-通过反射机制实例化，调用init-方法。"><span class="nav-number">4.2.</span> <span class="nav-text">2.通过反射机制实例化，调用init();方法。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-将实例存入handlerMappings用于后续的解析"><span class="nav-number">4.3.</span> <span class="nav-text">3.将实例存入handlerMappings用于后续的解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-找到对应DOM节点的解析器，开始解析，"><span class="nav-number">4.4.</span> <span class="nav-text">4.找到对应DOM节点的解析器，开始解析，</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-registerBeanPostProcessors"><span class="nav-number">4.5.</span> <span class="nav-text">5.registerBeanPostProcessors();</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#register-模块"><span class="nav-number">1.1.</span> <span class="nav-text">register 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#protocol-模块"><span class="nav-number">1.2.</span> <span class="nav-text">protocol 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#serialize-模块"><span class="nav-number">1.3.</span> <span class="nav-text">serialize 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#transport-模块"><span class="nav-number">1.4.</span> <span class="nav-text">transport 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cluster-模块"><span class="nav-number">1.5.</span> <span class="nav-text">cluster 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#配置元素"><span class="nav-number">1.6.</span> <span class="nav-text">配置元素</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#郑大侠的笔记-motan"><span class="nav-number">2.</span> <span class="nav-text">郑大侠的笔记 motan</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-SPI机制"><span class="nav-number">2.1.</span> <span class="nav-text">Motan源码解读-SPI机制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-Client异步消息"><span class="nav-number">2.2.</span> <span class="nav-text">Motan源码解读-Client异步消息</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-负载均衡"><span class="nav-number">2.3.</span> <span class="nav-text">Motan源码解读-负载均衡</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-容错策略"><span class="nav-number">2.4.</span> <span class="nav-text">Motan源码解读-容错策略</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-Protocol"><span class="nav-number">2.5.</span> <span class="nav-text">Motan源码解读-Protocol</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-源码结构"><span class="nav-number">2.6.</span> <span class="nav-text">Motan源码解读-源码结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-Filter"><span class="nav-number">2.7.</span> <span class="nav-text">Motan源码解读-Filter</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Motan源码解读-codec"><span class="nav-number">2.8.</span> <span class="nav-text">Motan源码解读-codec</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#manager-模块的启动"><span class="nav-number">3.</span> <span class="nav-text">manager 模块的启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#motan-的启动"><span class="nav-number">4.</span> <span class="nav-text">motan 的启动</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-获取命名空间uri"><span class="nav-number">4.1.</span> <span class="nav-text">1.获取命名空间uri :</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-通过反射机制实例化，调用init-方法。"><span class="nav-number">4.2.</span> <span class="nav-text">2.通过反射机制实例化，调用init();方法。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-将实例存入handlerMappings用于后续的解析"><span class="nav-number">4.3.</span> <span class="nav-text">3.将实例存入handlerMappings用于后续的解析</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-找到对应DOM节点的解析器，开始解析，"><span class="nav-number">4.4.</span> <span class="nav-text">4.找到对应DOM节点的解析器，开始解析，</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-registerBeanPostProcessors"><span class="nav-number">4.5.</span> <span class="nav-text">5.registerBeanPostProcessors();</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#控制台输出结果"><span class="nav-number">5.</span> <span class="nav-text">控制台输出结果</span></a></li></ol></div>
             
 
           </div>
